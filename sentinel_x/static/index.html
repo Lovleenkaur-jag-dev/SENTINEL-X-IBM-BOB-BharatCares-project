@@ -1,0 +1,2748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENTINEL-X — Intelligent SOAR Platform</title>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   SENTINEL-X — Premium Blue Glass Design System
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  --bg-base: #080c14;
+  --bg-surface: #0d1525;
+  --bg-card: #111827;
+  --bg-card-hover: #1a2540;
+  --bg-glass: rgba(16,30,60,0.7);
+  --bg-glass-light: rgba(30,60,100,0.3);
+  --border: rgba(56,100,180,0.25);
+  --border-bright: rgba(56,140,255,0.45);
+  --text-primary: #e2e8f0;
+  --text-secondary: #8ba3cc;
+  --text-muted: #4d6a9a;
+  --accent: #3b82f6;
+  --accent-bright: #60a5fa;
+  --accent-glow: rgba(59,130,246,0.25);
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --danger-dark: #dc2626;
+  --purple: #8b5cf6;
+  --cyan: #06b6d4;
+  --pink: #ec4899;
+  --orange: #f97316;
+
+  --severity-critical: #ef4444;
+  --severity-high: #f97316;
+  --severity-medium: #f59e0b;
+  --severity-low: #22c55e;
+  --severity-info: #3b82f6;
+
+  --font: -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Cascadia Code", "Fira Code", "Consolas", monospace;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow: 0 4px 24px rgba(0,0,20,0.5);
+  --shadow-glow: 0 0 20px rgba(59,130,246,0.15);
+  --transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body {
+  font-family: var(--font);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-surface); }
+::-webkit-scrollbar-thumb { background: rgba(59,130,246,0.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ─── Layout ─── */
+#app { display: flex; min-height: 100vh; }
+#sidebar {
+  width: 240px; min-width: 240px;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  position: fixed; left: 0; top: 0; bottom: 0;
+  z-index: 100;
+  transition: var(--transition);
+}
+#main-content {
+  flex: 1;
+  margin-left: 240px;
+  display: flex; flex-direction: column;
+  min-height: 100vh;
+}
+#topbar {
+  height: 56px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  position: sticky; top: 0; z-index: 90;
+}
+#page-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+/* ─── Sidebar ─── */
+.sidebar-logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.logo-mark {
+  display: flex; align-items: center; gap: 10px;
+}
+.logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--purple) 100%);
+  border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 900; color: white;
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+.logo-text { font-size: 15px; font-weight: 700; letter-spacing: 1px; color: var(--text-primary); }
+.logo-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; }
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 12px;
+  overflow-y: auto;
+}
+.nav-section-label {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--text-muted);
+  padding: 12px 8px 6px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: var(--radius);
+  cursor: pointer; transition: var(--transition);
+  color: var(--text-secondary); font-size: 13.5px;
+  margin-bottom: 2px; border: 1px solid transparent;
+  text-decoration: none; user-select: none;
+}
+.nav-item:hover { background: var(--bg-glass-light); color: var(--text-primary); border-color: var(--border); }
+.nav-item.active {
+  background: var(--accent-glow);
+  color: var(--accent-bright);
+  border-color: var(--border-bright);
+}
+.nav-item .nav-icon { font-size: 16px; width: 18px; text-align: center; }
+.nav-badge {
+  margin-left: auto;
+  background: var(--danger);
+  color: white; font-size: 10px; font-weight: 700;
+  padding: 1px 6px; border-radius: 10px;
+  min-width: 18px; text-align: center;
+}
+.nav-badge.warning { background: var(--warning); color: #111; }
+.nav-badge.accent { background: var(--accent); }
+
+.sidebar-footer {
+  padding: 12px;
+  border-top: 1px solid var(--border);
+}
+.ws-status {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; color: var(--text-muted);
+  padding: 6px 8px;
+}
+.ws-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--text-muted);
+}
+.ws-dot.connected { background: var(--success); box-shadow: 0 0 6px var(--success); animation: pulse 2s infinite; }
+.ws-dot.error { background: var(--danger); }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+/* ─── Topbar ─── */
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.page-title { font-size: 16px; font-weight: 600; }
+.page-subtitle { font-size: 12px; color: var(--text-muted); }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.threat-score {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 14px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 12px;
+}
+.threat-score .score { font-size: 16px; font-weight: 700; color: var(--warning); }
+.btn-demo {
+  background: linear-gradient(135deg, #7c3aed, var(--accent));
+  color: white; border: none; border-radius: var(--radius);
+  padding: 8px 16px; font-size: 12.5px; font-weight: 600;
+  cursor: pointer; transition: var(--transition);
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-demo:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(124,58,237,0.4); }
+.btn-demo:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* ─── Cards ─── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  transition: var(--transition);
+}
+.card:hover { border-color: var(--border-bright); box-shadow: var(--shadow-glow); }
+.card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.card-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.card-subtitle { font-size: 12px; color: var(--text-muted); }
+
+/* ─── Stat Cards ─── */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  position: relative; overflow: hidden;
+  transition: var(--transition);
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--accent-color, var(--accent));
+}
+.stat-card:hover { border-color: var(--border-bright); transform: translateY(-1px); }
+.stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 8px; }
+.stat-value { font-size: 28px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+.stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+.stat-trend { display: flex; align-items: center; gap: 4px; font-size: 11px; }
+.stat-trend.up { color: var(--success); }
+.stat-trend.down { color: var(--danger); }
+.stat-icon { position: absolute; top: 16px; right: 16px; font-size: 24px; opacity: 0.15; }
+
+/* ─── Tables ─── */
+.table-container { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th {
+  text-align: left; padding: 10px 14px;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
+  color: var(--text-muted); font-weight: 600;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-surface);
+}
+td {
+  padding: 12px 14px; font-size: 13px;
+  border-bottom: 1px solid rgba(56,100,180,0.1);
+  vertical-align: middle;
+}
+tr:hover td { background: var(--bg-glass-light); }
+tr:last-child td { border-bottom: none; }
+
+/* ─── Badges & Pills ─── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: 10px;
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;
+}
+.badge-critical { background: rgba(239,68,68,0.15); color: var(--severity-critical); border: 1px solid rgba(239,68,68,0.3); }
+.badge-high { background: rgba(249,115,22,0.15); color: var(--severity-high); border: 1px solid rgba(249,115,22,0.3); }
+.badge-medium { background: rgba(245,158,11,0.15); color: var(--severity-medium); border: 1px solid rgba(245,158,11,0.3); }
+.badge-low { background: rgba(34,197,94,0.15); color: var(--severity-low); border: 1px solid rgba(34,197,94,0.3); }
+.badge-info { background: rgba(59,130,246,0.15); color: var(--severity-info); border: 1px solid rgba(59,130,246,0.3); }
+.badge-success { background: rgba(34,197,94,0.15); color: var(--success); border: 1px solid rgba(34,197,94,0.3); }
+.badge-warning { background: rgba(245,158,11,0.15); color: var(--warning); border: 1px solid rgba(245,158,11,0.3); }
+.badge-danger { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
+.badge-muted { background: rgba(77,106,154,0.2); color: var(--text-muted); border: 1px solid rgba(77,106,154,0.3); }
+.badge-purple { background: rgba(139,92,246,0.15); color: var(--purple); border: 1px solid rgba(139,92,246,0.3); }
+.badge-cyan { background: rgba(6,182,212,0.15); color: var(--cyan); border: 1px solid rgba(6,182,212,0.3); }
+
+/* ─── Buttons ─── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: var(--radius);
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: var(--transition); border: 1px solid transparent;
+  text-decoration: none; user-select: none;
+}
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover:not(:disabled) { background: var(--accent-bright); box-shadow: 0 0 16px var(--accent-glow); }
+.btn-secondary { background: var(--bg-glass); color: var(--text-secondary); border-color: var(--border); }
+.btn-secondary:hover:not(:disabled) { background: var(--bg-glass-light); color: var(--text-primary); border-color: var(--border-bright); }
+.btn-danger { background: rgba(239,68,68,0.2); color: var(--danger); border-color: rgba(239,68,68,0.3); }
+.btn-danger:hover:not(:disabled) { background: rgba(239,68,68,0.3); }
+.btn-success { background: rgba(34,197,94,0.2); color: var(--success); border-color: rgba(34,197,94,0.3); }
+.btn-success:hover:not(:disabled) { background: rgba(34,197,94,0.3); }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-xs { padding: 2px 8px; font-size: 11px; }
+.btn-icon { padding: 7px; min-width: 32px; justify-content: center; }
+
+/* ─── Forms ─── */
+input, select, textarea {
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  font-size: 13px; font-family: var(--font);
+  transition: var(--transition);
+  width: 100%;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+input::placeholder, textarea::placeholder { color: var(--text-muted); }
+select option { background: var(--bg-card); }
+label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; display: block; }
+.form-group { margin-bottom: 14px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* ─── Modal ─── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius-lg);
+  width: 100%; max-width: 760px;
+  max-height: 90vh; overflow-y: auto;
+  transform: scale(0.95) translateY(20px);
+  transition: transform 0.2s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), var(--shadow-glow);
+}
+.modal-overlay.open .modal { transform: scale(1) translateY(0); }
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--bg-card); z-index: 1;
+}
+.modal-title { font-size: 16px; font-weight: 600; }
+.modal-body { padding: 24px; }
+.modal-footer {
+  display: flex; justify-content: flex-end; gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+}
+.btn-close {
+  background: none; border: none; cursor: pointer;
+  color: var(--text-muted); font-size: 20px; line-height: 1;
+  padding: 4px; border-radius: var(--radius);
+  transition: var(--transition);
+}
+.btn-close:hover { color: var(--text-primary); background: var(--bg-glass-light); }
+
+/* ─── Tabs ─── */
+.tab-bar {
+  display: flex; gap: 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+  padding-bottom: 0;
+}
+.tab {
+  padding: 8px 16px; font-size: 13px; font-weight: 500;
+  cursor: pointer; border-radius: var(--radius) var(--radius) 0 0;
+  color: var(--text-muted); transition: var(--transition);
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  user-select: none;
+}
+.tab:hover { color: var(--text-secondary); }
+.tab.active { color: var(--accent-bright); border-bottom-color: var(--accent); }
+
+/* ─── Charts ─── */
+.chart-container { position: relative; }
+.mini-chart { height: 60px; display: flex; align-items: flex-end; gap: 3px; }
+.mini-bar {
+  flex: 1; border-radius: 2px 2px 0 0;
+  background: var(--accent-glow);
+  border-top: 2px solid var(--accent);
+  transition: var(--transition); min-width: 4px;
+  cursor: pointer;
+}
+.mini-bar:hover { background: rgba(59,130,246,0.4); }
+
+/* SVG Chart */
+.chart-svg { width: 100%; overflow: visible; }
+.chart-line { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.chart-area { opacity: 0.15; }
+.chart-dot { transition: var(--transition); cursor: pointer; }
+.chart-dot:hover { r: 5; }
+
+/* ─── Timeline ─── */
+.timeline { position: relative; padding-left: 24px; }
+.timeline::before {
+  content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.timeline-item { position: relative; margin-bottom: 16px; }
+.timeline-dot {
+  position: absolute; left: -21px; top: 4px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg-card);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+.timeline-dot.system { background: var(--purple); box-shadow: 0 0 8px rgba(139,92,246,0.4); }
+.timeline-dot.analyst { background: var(--success); box-shadow: 0 0 8px rgba(34,197,94,0.3); }
+.timeline-time { font-size: 11px; color: var(--text-muted); margin-bottom: 3px; }
+.timeline-event { font-size: 13px; color: var(--text-primary); }
+.timeline-actor { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+/* ─── Progress ─── */
+.progress-bar {
+  height: 6px; background: var(--bg-surface);
+  border-radius: 3px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; border-radius: 3px;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ─── IOC List ─── */
+.ioc-grid { display: flex; flex-direction: column; gap: 8px; }
+.ioc-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; background: var(--bg-surface);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  font-size: 12px;
+}
+.ioc-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; min-width: 50px; }
+.ioc-value { font-family: var(--font-mono); font-size: 12px; flex: 1; color: var(--accent-bright); }
+.ioc-context { color: var(--text-muted); font-size: 11px; }
+
+/* ─── Execution Step ─── */
+.step-list { display: flex; flex-direction: column; gap: 8px; }
+.step-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 14px; background: var(--bg-surface);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  transition: var(--transition);
+}
+.step-item.running { border-color: var(--accent); background: var(--accent-glow); }
+.step-item.success { border-color: rgba(34,197,94,0.3); }
+.step-item.failed { border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.05); }
+.step-item.simulated { border-left: 3px solid var(--warning); }
+.step-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--border); color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.step-num.running { background: var(--accent); color: white; animation: pulse 1s infinite; }
+.step-num.success { background: var(--success); color: white; }
+.step-num.failed { background: var(--danger); color: white; }
+.step-info { flex: 1; min-width: 0; }
+.step-name { font-size: 13px; font-weight: 500; }
+.step-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.step-output {
+  margin-top: 8px; padding: 8px;
+  background: rgba(0,0,0,0.3); border-radius: var(--radius);
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary);
+  max-height: 120px; overflow-y: auto;
+}
+.step-meta {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; color: var(--text-muted); margin-left: auto; flex-shrink: 0;
+}
+
+/* ─── Playbook Flow Viz ─── */
+.flow-container {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  overflow-x: auto;
+}
+.flow-nodes { display: flex; flex-direction: column; align-items: center; gap: 0; position: relative; }
+.flow-node {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 18px; border-radius: var(--radius);
+  font-size: 13px; font-weight: 500;
+  border: 2px solid;
+  min-width: 280px; position: relative; z-index: 1;
+  cursor: pointer; transition: var(--transition);
+}
+.flow-node:hover { transform: scale(1.02); }
+.flow-node.trigger { border-color: var(--success); background: rgba(34,197,94,0.1); color: var(--success); }
+.flow-node.end { border-color: var(--success); background: rgba(34,197,94,0.1); color: var(--success); }
+.flow-node.triage { border-color: var(--warning); background: rgba(245,158,11,0.1); }
+.flow-node.enrich { border-color: var(--accent); background: rgba(59,130,246,0.1); }
+.flow-node.contain { border-color: var(--danger); background: rgba(239,68,68,0.1); color: var(--danger); }
+.flow-node.investigate { border-color: var(--purple); background: rgba(139,92,246,0.1); }
+.flow-node.notify { border-color: var(--cyan); background: rgba(6,182,212,0.1); color: var(--cyan); }
+.flow-node.manual { border-color: var(--orange); background: rgba(249,115,22,0.1); color: var(--orange); }
+.flow-node.remediate { border-color: var(--success); background: rgba(34,197,94,0.1); color: var(--success); }
+.flow-node.report { border-color: var(--text-muted); background: rgba(77,106,154,0.1); }
+.flow-node.share { border-color: var(--pink); background: rgba(236,72,153,0.1); color: var(--pink); }
+
+.flow-node.running { animation: flowPulse 1.5s infinite; }
+.flow-node.success { opacity: 0.9; }
+.flow-node.pending { opacity: 0.5; }
+
+@keyframes flowPulse {
+  0%,100%{ box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+  50%{ box-shadow: 0 0 0 6px rgba(59,130,246,0.2); }
+}
+
+.flow-connector {
+  width: 2px; height: 30px;
+  background: linear-gradient(to bottom, var(--border), var(--border-bright));
+  position: relative; z-index: 0;
+}
+.flow-connector::after {
+  content: '▼'; position: absolute; bottom: -8px; left: -5px;
+  font-size: 10px; color: var(--border-bright);
+}
+
+/* ─── Toast Notifications ─── */
+#toast-container {
+  position: fixed; bottom: 24px; right: 24px;
+  z-index: 1000; display: flex; flex-direction: column; gap: 10px;
+  pointer-events: none;
+}
+.toast {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  display: flex; align-items: flex-start; gap: 10px;
+  min-width: 300px; max-width: 420px;
+  box-shadow: var(--shadow);
+  pointer-events: all;
+  animation: slideIn 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.toast.success { border-left: 3px solid var(--success); }
+.toast.warning { border-left: 3px solid var(--warning); }
+.toast.error { border-left: 3px solid var(--danger); }
+.toast.info { border-left: 3px solid var(--accent); }
+.toast-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.toast-content { flex: 1; }
+.toast-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.toast-msg { font-size: 12px; color: var(--text-muted); }
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ─── Filters / Search ─── */
+.filter-bar {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.search-input {
+  position: relative; flex: 1; min-width: 200px;
+}
+.search-input input { padding-left: 36px; }
+.search-input::before {
+  content: '🔍'; position: absolute; left: 10px; top: 50%;
+  transform: translateY(-50%); font-size: 13px; pointer-events: none;
+  z-index: 1;
+}
+.filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 500;
+  cursor: pointer; transition: var(--transition);
+  background: var(--bg-glass); border: 1px solid var(--border);
+  color: var(--text-secondary); user-select: none;
+}
+.chip:hover { border-color: var(--border-bright); color: var(--text-primary); }
+.chip.active { background: var(--accent-glow); border-color: var(--accent); color: var(--accent-bright); }
+
+/* ─── Loading ─── */
+.spinner {
+  width: 20px; height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite; display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-overlay {
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px; color: var(--text-muted); gap: 12px;
+}
+
+/* ─── Empty State ─── */
+.empty-state {
+  text-align: center; padding: 60px 20px;
+  color: var(--text-muted);
+}
+.empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+.empty-state h3 { font-size: 16px; color: var(--text-secondary); margin-bottom: 8px; }
+.empty-state p { font-size: 13px; }
+
+/* ─── Threat Intel ─── */
+.ti-bar { height: 4px; border-radius: 2px; background: var(--bg-surface); overflow: hidden; margin-top: 4px; }
+.ti-fill { height: 100%; border-radius: 2px; }
+.reputation-malicious { color: var(--danger); }
+.reputation-suspicious { color: var(--warning); }
+.reputation-clean { color: var(--success); }
+.reputation-unknown { color: var(--text-muted); }
+
+/* ─── Risk Score ─── */
+.risk-ring {
+  width: 56px; height: 56px; position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.risk-ring svg { position: absolute; top: 0; left: 0; }
+.risk-value { font-size: 14px; font-weight: 700; position: relative; z-index: 1; }
+
+/* ─── Simulated Action Warning ─── */
+.sim-banner {
+  background: rgba(245,158,11,0.1);
+  border: 1px solid rgba(245,158,11,0.3);
+  border-radius: var(--radius);
+  padding: 8px 12px; font-size: 11px; color: var(--warning);
+  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+}
+
+/* ─── MITRE ─── */
+.mitre-tag {
+  display: inline-block;
+  padding: 2px 7px; border-radius: 4px;
+  background: rgba(139,92,246,0.15);
+  border: 1px solid rgba(139,92,246,0.3);
+  color: var(--purple); font-size: 11px; font-family: var(--font-mono);
+  margin: 2px;
+}
+
+/* ─── Pages ─── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ─── Grid Layouts ─── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+.grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+
+/* ─── Incident Detail ─── */
+.incident-header {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 20px;
+  position: relative; overflow: hidden;
+}
+.incident-header::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.inc-critical::before { background: var(--severity-critical); }
+.inc-high::before { background: var(--severity-high); }
+.inc-medium::before { background: var(--severity-medium); }
+.inc-low::before { background: var(--severity-low); }
+
+/* ─── Alert Feed ─── */
+.alert-row { cursor: pointer; }
+.alert-row:hover { background: var(--bg-glass-light); }
+.alert-age { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+
+/* ─── Status Indicator ─── */
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  display: inline-block; margin-right: 6px;
+}
+.status-new { background: var(--accent); }
+.status-triaging { background: var(--warning); }
+.status-investigating { background: var(--orange); }
+.status-contained { background: var(--cyan); }
+.status-resolved { background: var(--success); }
+.status-closed { background: var(--text-muted); }
+.status-false_positive { background: var(--text-muted); }
+
+/* Live execution panel */
+.exec-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 20px;
+  position: relative; overflow: hidden;
+}
+.exec-panel::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--purple));
+  animation: scanline 2s linear infinite;
+}
+@keyframes scanline {
+  0%{ background-position: -100% 0; }
+  100%{ background-position: 200% 0; }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .grid-2, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  #sidebar { width: 64px; min-width: 64px; }
+  .sidebar-logo .logo-text, .sidebar-logo .logo-sub,
+  .nav-item span, .nav-section-label, .ws-status span { display: none; }
+  #main-content { margin-left: 64px; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+}
+
+/* Typewriter */
+.typewriter { overflow: hidden; white-space: nowrap; border-right: 2px solid var(--accent); animation: type 2s steps(30,end), blink 0.7s step-end infinite alternate; }
+@keyframes type { from{width:0} to{width:100%} }
+@keyframes blink { from{border-color:var(--accent)} to{border-color:transparent} }
+
+/* Scan animation on critical */
+.critical-glow { box-shadow: 0 0 20px rgba(239,68,68,0.2); border-color: rgba(239,68,68,0.4) !important; }
+.critical-glow:hover { box-shadow: 0 0 30px rgba(239,68,68,0.3) !important; }
+
+/* Audit log severity */
+.audit-info { border-left: 3px solid var(--accent); }
+.audit-warning { border-left: 3px solid var(--warning); }
+.audit-critical { border-left: 3px solid var(--danger); }
+
+/* Code block */
+pre {
+  background: #0a0f1a; border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 14px;
+  font-family: var(--font-mono); font-size: 12px;
+  color: var(--text-secondary); overflow-x: auto;
+  line-height: 1.7;
+}
+pre .key { color: var(--accent-bright); }
+pre .val { color: var(--success); }
+pre .str { color: var(--warning); }
+pre .num { color: var(--purple); }
+
+/* Notification pulse */
+.pulse-critical { animation: pulseCrit 2s infinite; }
+@keyframes pulseCrit {
+  0%,100%{ box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+  50%{ box-shadow: 0 0 0 8px rgba(239,68,68,0.15); }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- ══════════════ SIDEBAR ══════════════ -->
+  <nav id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <div class="logo-icon">S</div>
+        <div>
+          <div class="logo-text">SENTINEL-X</div>
+          <div class="logo-sub">SOAR PLATFORM v1.0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Operations</div>
+      <a class="nav-item active" data-page="dashboard" onclick="nav('dashboard')">
+        <span class="nav-icon">📊</span>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item" data-page="incidents" onclick="nav('incidents')">
+        <span class="nav-icon">🚨</span>
+        <span>Incidents</span>
+        <span class="nav-badge" id="badge-incidents">-</span>
+      </a>
+      <a class="nav-item" data-page="alerts" onclick="nav('alerts')">
+        <span class="nav-icon">⚠️</span>
+        <span>Alert Feed</span>
+        <span class="nav-badge warning" id="badge-alerts">-</span>
+      </a>
+
+      <div class="nav-section-label">Automation</div>
+      <a class="nav-item" data-page="playbooks" onclick="nav('playbooks')">
+        <span class="nav-icon">▶️</span>
+        <span>Playbooks</span>
+      </a>
+      <a class="nav-item" data-page="executions" onclick="nav('executions')">
+        <span class="nav-icon">⚙️</span>
+        <span>Executions</span>
+        <span class="nav-badge accent" id="badge-executions">-</span>
+      </a>
+
+      <div class="nav-section-label">Intelligence</div>
+      <a class="nav-item" data-page="threat-intel" onclick="nav('threat-intel')">
+        <span class="nav-icon">🔍</span>
+        <span>Threat Intel</span>
+      </a>
+      <a class="nav-item" data-page="audit" onclick="nav('audit')">
+        <span class="nav-icon">📋</span>
+        <span>Audit Trail</span>
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="ws-status">
+        <div class="ws-dot" id="ws-dot"></div>
+        <span id="ws-label">Connecting...</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════ MAIN ══════════════ -->
+  <div id="main-content">
+    <!-- Topbar -->
+    <header id="topbar">
+      <div class="topbar-left">
+        <div>
+          <div class="page-title" id="topbar-title">Security Operations Dashboard</div>
+          <div class="page-subtitle" id="topbar-sub">Real-time threat monitoring and incident response</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="threat-score">
+          <span style="color:var(--text-muted);font-size:11px;">THREAT LEVEL</span>
+          <span class="score" id="threat-score-val">--</span>
+          <span style="color:var(--text-muted);font-size:11px;">/100</span>
+        </div>
+        <button class="btn-demo" id="btn-demo" onclick="runDemo()">
+          ⚡ Run Demo
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main id="page-content">
+      <!-- Active execution panel (shown when playbook running) -->
+      <div id="live-exec-panel" class="exec-panel" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="spinner"></div>
+            <div>
+              <div style="font-size:13px;font-weight:600" id="live-exec-name">Executing playbook...</div>
+              <div style="font-size:11px;color:var(--text-muted)" id="live-exec-id"></div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div id="live-exec-step" style="font-size:12px;color:var(--text-muted)"></div>
+            <button class="btn btn-xs btn-secondary" onclick="viewLiveExecution()">View Details</button>
+            <button class="btn-close" onclick="document.getElementById('live-exec-panel').style.display='none'">×</button>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="live-exec-progress" style="width:0%;background:linear-gradient(90deg,var(--accent),var(--purple))"></div>
+        </div>
+      </div>
+
+      <!-- ─── DASHBOARD PAGE ─── -->
+      <div id="page-dashboard" class="page active">
+        <div class="stat-grid" id="stats-grid">
+          <div class="stat-card" style="--accent-color:var(--danger)">
+            <div class="stat-label">Critical Incidents</div>
+            <div class="stat-value" id="stat-critical">--</div>
+            <div class="stat-sub">Active / unresolved</div>
+            <div class="stat-icon">🔴</div>
+          </div>
+          <div class="stat-card" style="--accent-color:var(--orange)">
+            <div class="stat-label">Open Incidents</div>
+            <div class="stat-value" id="stat-open">--</div>
+            <div class="stat-sub" id="stat-open-sub">Requiring attention</div>
+            <div class="stat-icon">🚨</div>
+          </div>
+          <div class="stat-card" style="--accent-color:var(--warning)">
+            <div class="stat-label">New Alerts (24h)</div>
+            <div class="stat-value" id="stat-alerts24">--</div>
+            <div class="stat-sub">Unacknowledged</div>
+            <div class="stat-icon">⚠️</div>
+          </div>
+          <div class="stat-card" style="--accent-color:var(--accent)">
+            <div class="stat-label">Playbook Success Rate</div>
+            <div class="stat-value" id="stat-pb-rate">--<span style="font-size:16px">%</span></div>
+            <div class="stat-sub" id="stat-pb-sub">--</div>
+            <div class="stat-icon">▶️</div>
+          </div>
+          <div class="stat-card" style="--accent-color:var(--success)">
+            <div class="stat-label">Avg MTTR</div>
+            <div class="stat-value" id="stat-mttr">--<span style="font-size:14px">h</span></div>
+            <div class="stat-sub">Mean time to resolve</div>
+            <div class="stat-icon">⏱️</div>
+          </div>
+          <div class="stat-card" style="--accent-color:var(--purple)">
+            <div class="stat-label">Active Executions</div>
+            <div class="stat-value" id="stat-active-exec">--</div>
+            <div class="stat-sub">Playbooks running now</div>
+            <div class="stat-icon">⚙️</div>
+          </div>
+        </div>
+
+        <!-- Charts row -->
+        <div class="grid-2" style="margin-bottom:20px">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Alert Volume (30 Days)</div>
+                <div class="card-subtitle">Daily incoming alert count</div>
+              </div>
+              <select id="chart-metric-select" onchange="loadMetricChart()" style="width:auto;font-size:12px;padding:4px 8px">
+                <option value="daily_alerts">Alerts</option>
+                <option value="mttd_minutes">MTTD (min)</option>
+                <option value="mttr_hours">MTTR (hrs)</option>
+                <option value="playbook_executions">Executions</option>
+              </select>
+            </div>
+            <div id="metric-chart" style="height:140px"></div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Incident by Category</div>
+            </div>
+            <div id="category-chart" style="height:140px;display:flex;align-items:center;justify-content:center"></div>
+          </div>
+        </div>
+
+        <!-- Recent Incidents + Active Executions -->
+        <div class="grid-2-1">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Recent Incidents</div>
+              <button class="btn btn-sm btn-secondary" onclick="nav('incidents')">View All</button>
+            </div>
+            <div class="table-container">
+              <table id="recent-incidents-table">
+                <thead>
+                  <tr>
+                    <th>Incident</th>
+                    <th>Severity</th>
+                    <th>Status</th>
+                    <th>Assigned</th>
+                    <th>Age</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-incidents-body">
+                  <tr><td colspan="5" class="loading-overlay"><div class="spinner"></div> Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Playbook Activity</div>
+            </div>
+            <div id="pb-activity" style="display:flex;flex-direction:column;gap:8px">
+              <div class="loading-overlay"><div class="spinner"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── INCIDENTS PAGE ─── -->
+      <div id="page-incidents" class="page">
+        <div class="filter-bar">
+          <div class="search-input" style="max-width:300px">
+            <input type="text" id="inc-search" placeholder="Search incidents..." oninput="filterIncidents()">
+          </div>
+          <div class="filter-chips">
+            <span class="chip active" onclick="setIncFilter('status','')" data-filter="status" data-val="">All</span>
+            <span class="chip" onclick="setIncFilter('status','new')" data-filter="status" data-val="new">New</span>
+            <span class="chip" onclick="setIncFilter('status','triaging')" data-filter="status" data-val="triaging">Triaging</span>
+            <span class="chip" onclick="setIncFilter('status','investigating')" data-filter="status" data-val="investigating">Investigating</span>
+            <span class="chip" onclick="setIncFilter('status','contained')" data-filter="status" data-val="contained">Contained</span>
+            <span class="chip" onclick="setIncFilter('status','resolved')" data-filter="status" data-val="resolved">Resolved</span>
+          </div>
+          <div class="filter-chips">
+            <span class="chip active" onclick="setIncFilter('severity','')" data-filter="severity" data-val="">All Severity</span>
+            <span class="chip" onclick="setIncFilter('severity','critical')" data-filter="severity" data-val="critical">Critical</span>
+            <span class="chip" onclick="setIncFilter('severity','high')" data-filter="severity" data-val="high">High</span>
+            <span class="chip" onclick="setIncFilter('severity','medium')" data-filter="severity" data-val="medium">Medium</span>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openIncidentModal()">+ New Incident</button>
+        </div>
+
+        <div class="card">
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Severity</th>
+                  <th>Status</th>
+                  <th>Category</th>
+                  <th>Assigned To</th>
+                  <th>Risk Score</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="incidents-body">
+                <tr><td colspan="9" class="loading-overlay"><div class="spinner"></div> Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── ALERTS PAGE ─── -->
+      <div id="page-alerts" class="page">
+        <div class="filter-bar">
+          <div class="search-input" style="max-width:300px">
+            <input type="text" id="alert-search" placeholder="Search alerts..." oninput="filterAlerts()">
+          </div>
+          <div class="filter-chips">
+            <span class="chip active" onclick="setAlertFilter('status','')" data-filter="astatus" data-val="">All</span>
+            <span class="chip" onclick="setAlertFilter('status','new')" data-filter="astatus" data-val="new">New</span>
+            <span class="chip" onclick="setAlertFilter('status','acknowledged')" data-filter="astatus" data-val="acknowledged">Acknowledged</span>
+            <span class="chip" onclick="setAlertFilter('status','escalated')" data-filter="astatus" data-val="escalated">Escalated</span>
+          </div>
+          <div class="filter-chips">
+            <span class="chip active" onclick="setAlertFilter('severity','')" data-filter="aseverity" data-val="">All Severity</span>
+            <span class="chip" onclick="setAlertFilter('severity','critical')" data-filter="aseverity" data-val="critical">Critical</span>
+            <span class="chip" onclick="setAlertFilter('severity','high')" data-filter="aseverity" data-val="high">High</span>
+            <span class="chip" onclick="setAlertFilter('severity','medium')" data-filter="aseverity" data-val="medium">Medium</span>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openCreateAlertModal()">+ Ingest Alert</button>
+        </div>
+
+        <div class="card">
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Alert</th>
+                  <th>Source</th>
+                  <th>Severity</th>
+                  <th>Status</th>
+                  <th>Host</th>
+                  <th>Source IP</th>
+                  <th>Risk</th>
+                  <th>Age</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="alerts-body">
+                <tr><td colspan="9" class="loading-overlay"><div class="spinner"></div> Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── PLAYBOOKS PAGE ─── -->
+      <div id="page-playbooks" class="page">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+          <button class="btn btn-primary" onclick="openCreatePlaybookModal()">+ Create Playbook</button>
+        </div>
+        <div id="playbooks-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px">
+          <div class="loading-overlay"><div class="spinner"></div> Loading...</div>
+        </div>
+      </div>
+
+      <!-- ─── EXECUTIONS PAGE ─── -->
+      <div id="page-executions" class="page">
+        <div class="filter-bar">
+          <div class="filter-chips">
+            <span class="chip active" onclick="setExecFilter('')" data-eval="">All</span>
+            <span class="chip" onclick="setExecFilter('running')" data-eval="running">Running</span>
+            <span class="chip" onclick="setExecFilter('success')" data-eval="success">Success</span>
+            <span class="chip" onclick="setExecFilter('failed')" data-eval="failed">Failed</span>
+            <span class="chip" onclick="setExecFilter('partial')" data-eval="partial">Paused</span>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="loadExecutions()">🔄 Refresh</button>
+        </div>
+        <div class="card">
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Execution ID</th>
+                  <th>Playbook</th>
+                  <th>Incident</th>
+                  <th>Status</th>
+                  <th>Progress</th>
+                  <th>Triggered By</th>
+                  <th>Duration</th>
+                  <th>Started</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="executions-body">
+                <tr><td colspan="9" class="loading-overlay"><div class="spinner"></div> Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── THREAT INTEL PAGE ─── -->
+      <div id="page-threat-intel" class="page">
+        <div class="grid-2" style="margin-bottom:20px">
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px">IOC Lookup</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>IOC Type</label>
+                <select id="ti-type">
+                  <option value="ip">IP Address</option>
+                  <option value="domain">Domain</option>
+                  <option value="hash">File Hash</option>
+                  <option value="url">URL</option>
+                  <option value="email">Email</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>IOC Value</label>
+                <input type="text" id="ti-value" placeholder="185.220.101.47">
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="lookupIOC()" style="width:100%">🔍 Lookup IOC</button>
+            <div id="ti-result" style="margin-top:14px"></div>
+          </div>
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px">Quick Reference IOCs</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-muted)">
+              <div>Try: <code style="color:var(--accent-bright)">185.220.101.47</code> (malicious IP)</div>
+              <div>Try: <code style="color:var(--accent-bright)">malware-delivery.xyz</code> (malicious domain)</div>
+              <div>Try: <code style="color:var(--accent-bright)">e17a8a4e76a56a839c45bb6b29b18bca</code> (malicious hash)</div>
+              <div>Try: <code style="color:var(--accent-bright)">phishing@secure-login-alert.com</code> (phishing email)</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Threat Intelligence Database</div>
+            <div class="filter-chips">
+              <span class="chip active" onclick="filterTI('')" data-ti="">All</span>
+              <span class="chip" onclick="filterTI('malicious')" data-ti="malicious">Malicious</span>
+              <span class="chip" onclick="filterTI('suspicious')" data-ti="suspicious">Suspicious</span>
+              <span class="chip" onclick="filterTI('clean')" data-ti="clean">Clean</span>
+            </div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr><th>Type</th><th>IOC</th><th>Reputation</th><th>Confidence</th><th>Tags</th><th>Sources</th></tr>
+              </thead>
+              <tbody id="ti-body">
+                <tr><td colspan="6" class="loading-overlay"><div class="spinner"></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── AUDIT PAGE ─── -->
+      <div id="page-audit" class="page">
+        <div class="grid-3" style="margin-bottom:20px">
+          <div class="stat-card" style="--accent-color:var(--accent)">
+            <div class="stat-label">Total Events</div>
+            <div class="stat-value" id="audit-total">--</div>
+            <div class="stat-icon">📋</div>
+          </div>
+          <div class="stat-card" style="--accent-color:var(--warning)">
+            <div class="stat-label">Warning Events</div>
+            <div class="stat-value" id="audit-warn">--</div>
+            <div class="stat-icon">⚠️</div>
+          </div>
+          <div class="stat-card" style="--accent-color:var(--danger)">
+            <div class="stat-label">Critical Events</div>
+            <div class="stat-value" id="audit-critical">--</div>
+            <div class="stat-icon">🚨</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Audit Trail</div>
+            <div style="display:flex;gap:8px">
+              <select id="audit-severity-filter" onchange="loadAudit()" style="width:auto;font-size:12px;padding:4px 8px">
+                <option value="">All Severity</option>
+                <option value="info">Info</option>
+                <option value="warning">Warning</option>
+                <option value="critical">Critical</option>
+              </select>
+              <button class="btn btn-sm btn-secondary" onclick="loadAudit()">🔄 Refresh</button>
+            </div>
+          </div>
+          <div id="audit-list" style="display:flex;flex-direction:column;gap:6px">
+            <div class="loading-overlay"><div class="spinner"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </main><!-- /page-content -->
+  </div><!-- /main-content -->
+</div><!-- /app -->
+
+<!-- ══════════════ MODALS ══════════════ -->
+
+<!-- Incident Detail Modal -->
+<div class="modal-overlay" id="modal-incident">
+  <div class="modal" style="max-width:900px">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-inc-title">Incident Details</div>
+        <div style="font-size:12px;color:var(--text-muted)" id="modal-inc-id"></div>
+      </div>
+      <button class="btn-close" onclick="closeModal('modal-incident')">×</button>
+    </div>
+    <div class="modal-body" id="modal-inc-body">
+      <div class="loading-overlay"><div class="spinner"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Alert Detail Modal -->
+<div class="modal-overlay" id="modal-alert">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-alert-title">Alert Details</div>
+        <div style="font-size:12px;color:var(--text-muted)" id="modal-alert-id"></div>
+      </div>
+      <button class="btn-close" onclick="closeModal('modal-alert')">×</button>
+    </div>
+    <div class="modal-body" id="modal-alert-body">
+      <div class="loading-overlay"><div class="spinner"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Playbook Detail / Execution Modal -->
+<div class="modal-overlay" id="modal-playbook">
+  <div class="modal" style="max-width:880px">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-pb-title">Playbook</div>
+        <div style="font-size:12px;color:var(--text-muted)" id="modal-pb-id"></div>
+      </div>
+      <button class="btn-close" onclick="closeModal('modal-playbook')">×</button>
+    </div>
+    <div class="modal-body" id="modal-pb-body">
+      <div class="loading-overlay"><div class="spinner"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Execution Detail Modal -->
+<div class="modal-overlay" id="modal-execution">
+  <div class="modal" style="max-width:900px">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-exec-title">Execution Details</div>
+        <div style="font-size:12px;color:var(--text-muted)" id="modal-exec-id"></div>
+      </div>
+      <button class="btn-close" onclick="closeModal('modal-execution')">×</button>
+    </div>
+    <div class="modal-body" id="modal-exec-body">
+      <div class="loading-overlay"><div class="spinner"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Alert Modal -->
+<div class="modal-overlay" id="modal-create-alert">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Ingest New Alert</div>
+      <button class="btn-close" onclick="closeModal('modal-create-alert')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Alert Title *</label>
+        <input id="ca-title" type="text" placeholder="Suspicious activity detected on HOST-001">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Severity</label>
+          <select id="ca-severity">
+            <option value="critical">Critical</option>
+            <option value="high">High</option>
+            <option value="medium" selected>Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="ca-category">
+            <option value="malware">Malware</option>
+            <option value="ransomware">Ransomware</option>
+            <option value="phishing">Phishing</option>
+            <option value="brute_force">Brute Force</option>
+            <option value="data_exfiltration">Data Exfiltration</option>
+            <option value="lateral_movement">Lateral Movement</option>
+            <option value="privilege_escalation">Privilege Escalation</option>
+            <option value="unknown" selected>Unknown</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Source</label>
+          <input id="ca-source" type="text" placeholder="Splunk SIEM" value="Manual">
+        </div>
+        <div class="form-group">
+          <label>Affected Host</label>
+          <input id="ca-host" type="text" placeholder="WORKSTATION-001">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Source IP</label>
+          <input id="ca-srcip" type="text" placeholder="192.168.1.50">
+        </div>
+        <div class="form-group">
+          <label>Dest IP</label>
+          <input id="ca-dstip" type="text" placeholder="10.0.0.1">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="ca-desc" rows="3" placeholder="Describe the alert details..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-create-alert')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitCreateAlert()">Ingest Alert</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Playbook Modal -->
+<div class="modal-overlay" id="modal-create-playbook">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Create Playbook</div>
+      <button class="btn-close" onclick="closeModal('modal-create-playbook')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Playbook Name *</label>
+        <input id="cpb-name" type="text" placeholder="Custom Response Playbook">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Category</label>
+          <select id="cpb-category">
+            <option value="malware">Malware</option>
+            <option value="ransomware">Ransomware</option>
+            <option value="phishing">Phishing</option>
+            <option value="brute_force">Brute Force</option>
+            <option value="data_exfiltration">Data Exfiltration</option>
+            <option value="unknown" selected>Unknown/Generic</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tags (comma-separated)</label>
+          <input id="cpb-tags" type="text" placeholder="custom, response">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="cpb-desc" rows="3" placeholder="Describe what this playbook does..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-create-playbook')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitCreatePlaybook()">Create Playbook</button>
+    </div>
+  </div>
+</div>
+
+<!-- Run Playbook Modal -->
+<div class="modal-overlay" id="modal-run-playbook">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-header">
+      <div class="modal-title">Execute Playbook</div>
+      <button class="btn-close" onclick="closeModal('modal-run-playbook')">×</button>
+    </div>
+    <div class="modal-body">
+      <div id="run-pb-info" style="margin-bottom:14px"></div>
+      <div class="sim-banner">⚠️ Containment actions in this playbook are <strong>SIMULATED</strong>. No actual network, host, or account changes will be made.</div>
+      <div class="form-group">
+        <label>Link to Incident (optional)</label>
+        <select id="run-inc-id">
+          <option value="">— None (standalone execution) —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Triggered By</label>
+        <input id="run-analyst" type="text" value="analyst:admin">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-run-playbook')">Cancel</button>
+      <button class="btn btn-primary" id="run-pb-submit" onclick="submitRunPlaybook()">▶ Execute Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<!-- ══════════════ JAVASCRIPT ══════════════ -->
+<script>
+'use strict';
+
+// ─── State ───
+const STATE = {
+  incidents: [],
+  alerts: [],
+  playbooks: [],
+  executions: [],
+  stats: {},
+  incFilter: { status: '', severity: '' },
+  alertFilter: { status: '', severity: '' },
+  execFilter: '',
+  tiFilter: '',
+  currentPage: 'dashboard',
+  ws: null,
+  liveExecId: null,
+  selectedPlaybookId: null,
+};
+
+// ─── API ───
+const API = '/api';
+
+async function api(method, path, body) {
+  try {
+    const opts = {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+    };
+    if (body) opts.body = JSON.stringify(body);
+    const r = await fetch(API + path, opts);
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({ detail: r.statusText }));
+      throw new Error(err.detail || r.statusText);
+    }
+    return r.json();
+  } catch (e) {
+    toast('error', 'API Error', e.message);
+    throw e;
+  }
+}
+
+// ─── Navigation ───
+const PAGE_INFO = {
+  'dashboard': ['Security Operations Dashboard', 'Real-time threat monitoring and incident response'],
+  'incidents': ['Incident Management', 'Active security incidents and investigations'],
+  'alerts': ['Alert Feed', 'Ingested security alerts pending triage'],
+  'playbooks': ['SOAR Playbooks', 'Automated response playbook library'],
+  'executions': ['Playbook Executions', 'Running and historical playbook execution log'],
+  'threat-intel': ['Threat Intelligence', 'IOC database and enrichment'],
+  'audit': ['Audit Trail', 'Complete action and event audit log'],
+};
+
+function nav(page) {
+  STATE.currentPage = page;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const el = document.getElementById('page-' + page);
+  if (el) el.classList.add('active');
+  const navEl = document.querySelector(`.nav-item[data-page="${page}"]`);
+  if (navEl) navEl.classList.add('active');
+  const info = PAGE_INFO[page] || [page, ''];
+  document.getElementById('topbar-title').textContent = info[0];
+  document.getElementById('topbar-sub').textContent = info[1];
+  // Load page data
+  const loaders = {
+    'dashboard': loadDashboard,
+    'incidents': loadIncidents,
+    'alerts': loadAlerts,
+    'playbooks': loadPlaybooks,
+    'executions': loadExecutions,
+    'threat-intel': loadThreatIntel,
+    'audit': loadAudit,
+  };
+  if (loaders[page]) loaders[page]();
+}
+
+// ─── Toast ───
+function toast(type, title, msg, duration=4000) {
+  const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<div class="toast-icon">${icons[type]||'•'}</div><div class="toast-content"><div class="toast-title">${title}</div>${msg?`<div class="toast-msg">${msg}</div>`:''}</div>`;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateX(100%)'; t.style.transition='all 0.3s'; setTimeout(()=>t.remove(),300); }, duration);
+}
+
+// ─── Helpers ───
+function timeAgo(dt) {
+  if (!dt) return '—';
+  const d = new Date(dt + (dt.endsWith('Z') ? '' : 'Z'));
+  const now = new Date();
+  const s = Math.floor((now - d) / 1000);
+  if (s < 60) return `${s}s ago`;
+  if (s < 3600) return `${Math.floor(s/60)}m ago`;
+  if (s < 86400) return `${Math.floor(s/3600)}h ago`;
+  return `${Math.floor(s/86400)}d ago`;
+}
+function fmtDate(dt) {
+  if (!dt) return '—';
+  return new Date(dt + (dt.endsWith('Z') ? '' : 'Z')).toLocaleString();
+}
+function severityBadge(s) {
+  const map = { critical:'critical', high:'high', medium:'medium', low:'low', info:'info' };
+  return `<span class="badge badge-${map[s]||'muted'}">${s||'?'}</span>`;
+}
+function statusBadge(s) {
+  const map = {
+    new:'info', triaging:'warning', investigating:'warning',
+    contained:'cyan', resolved:'success', closed:'muted',
+    false_positive:'muted', running:'info', success:'success',
+    failed:'danger', partial:'warning', pending:'muted',
+    acknowledged:'warning', escalated:'danger', suppressed:'muted',
+  };
+  const label = s ? s.replace(/_/g,' ') : '?';
+  return `<span class="badge badge-${map[s]||'muted'}">${label}</span>`;
+}
+function riskBar(score) {
+  const pct = Math.min(100, score||0);
+  const color = pct>=80?'var(--danger)':pct>=60?'var(--warning)':pct>=40?'var(--accent)':'var(--success)';
+  return `<div style="display:flex;align-items:center;gap:8px">
+    <div style="font-size:13px;font-weight:600;color:${color};min-width:30px">${Math.round(pct)}</div>
+    <div class="progress-bar" style="flex:1;max-width:80px"><div class="progress-fill" style="width:${pct}%;background:${color}"></div></div>
+  </div>`;
+}
+function categoryLabel(c) {
+  const map={malware:'🦠 Malware',ransomware:'💰 Ransomware',phishing:'🎣 Phishing',brute_force:'🔑 Brute Force',data_exfiltration:'📤 Data Exfil',lateral_movement:'🔀 Lateral Move',privilege_escalation:'⬆️ Priv Esc',insider_threat:'👤 Insider',apt:'🎯 APT',reconnaissance:'🔭 Recon',denial_of_service:'🌊 DoS',unknown:'❓ Unknown'};
+  return map[c]||c||'—';
+}
+function execProgress(e) {
+  const total = e.total_steps||1;
+  const current = e.current_step||0;
+  const pct = Math.round(current/total*100);
+  const color = e.status==='success'?'var(--success)':e.status==='failed'?'var(--danger)':'var(--accent)';
+  return `<div style="display:flex;align-items:center;gap:8px">
+    <div class="progress-bar" style="flex:1;max-width:100px"><div class="progress-fill" style="width:${pct}%;background:${color}"></div></div>
+    <span style="font-size:11px;color:var(--text-muted)">${current}/${total}</span>
+  </div>`;
+}
+
+// ─── Modal ───
+function openModal(id) {
+  const el = document.getElementById(id);
+  if (el) { el.classList.add('open'); }
+}
+function closeModal(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ─── WebSocket ───
+function connectWS() {
+  const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl = `${proto}//${location.host}/ws`;
+  const ws = new WebSocket(wsUrl);
+  STATE.ws = ws;
+  const dot = document.getElementById('ws-dot');
+  const label = document.getElementById('ws-label');
+
+  ws.onopen = () => {
+    dot.className = 'ws-dot connected';
+    label.textContent = 'Live';
+  };
+  ws.onclose = () => {
+    dot.className = 'ws-dot error';
+    label.textContent = 'Reconnecting...';
+    setTimeout(connectWS, 3000);
+  };
+  ws.onerror = () => {
+    dot.className = 'ws-dot error';
+  };
+  ws.onmessage = e => {
+    try {
+      const msg = JSON.parse(e.data);
+      handleWSMessage(msg);
+    } catch {}
+  };
+}
+
+function handleWSMessage(msg) {
+  const { type, data } = msg;
+  switch (type) {
+    case 'execution_started':
+      STATE.liveExecId = data.execution_id;
+      showLiveExecPanel(data.execution_id, data.playbook_name, 0, data.total_steps);
+      toast('info', 'Playbook Started', data.playbook_name);
+      break;
+    case 'step_started':
+      updateLiveExecPanel(data);
+      break;
+    case 'step_completed':
+      updateLiveExecProgress(data.progress, data.step_name);
+      if (STATE.currentPage === 'executions') loadExecutions();
+      break;
+    case 'execution_completed':
+      hideLiveExecPanel();
+      toast('success', 'Playbook Completed', `${data.playbook_name} — ${data.execution_time}s`);
+      updateBadges();
+      if (STATE.currentPage === 'executions') loadExecutions();
+      if (STATE.currentPage === 'dashboard') loadDashboard();
+      break;
+    case 'execution_failed':
+      hideLiveExecPanel();
+      toast('error', 'Playbook Failed', data.error);
+      break;
+    case 'execution_paused':
+      toast('warning', 'Playbook Paused', `Manual step: ${data.step_name}`);
+      hideLiveExecPanel();
+      break;
+    case 'incident_updated':
+      if (STATE.currentPage === 'incidents') loadIncidents();
+      break;
+    case 'alert_created':
+      updateBadges();
+      if (STATE.currentPage === 'alerts') loadAlerts();
+      break;
+    case 'demo_started':
+      toast('info', 'Demo Scenario', `Scenario started: ${data.scenario}`);
+      setTimeout(() => nav('incidents'), 800);
+      break;
+  }
+}
+
+function showLiveExecPanel(id, name, step, total) {
+  const panel = document.getElementById('live-exec-panel');
+  panel.style.display = 'block';
+  document.getElementById('live-exec-name').textContent = name || 'Executing playbook...';
+  document.getElementById('live-exec-id').textContent = id;
+  document.getElementById('live-exec-step').textContent = `Step 0/${total}`;
+  document.getElementById('live-exec-progress').style.width = '0%';
+  STATE.liveExecId = id;
+}
+function updateLiveExecPanel(data) {
+  document.getElementById('live-exec-step').textContent = `Step ${data.step_index+1} — ${data.step_name}`;
+}
+function updateLiveExecProgress(pct, stepName) {
+  document.getElementById('live-exec-progress').style.width = pct + '%';
+}
+function hideLiveExecPanel() {
+  setTimeout(() => {
+    document.getElementById('live-exec-panel').style.display = 'none';
+  }, 2000);
+}
+function viewLiveExecution() {
+  if (STATE.liveExecId) {
+    nav('executions');
+    setTimeout(() => openExecutionModal(STATE.liveExecId), 500);
+  }
+}
+
+// ─── Badge Updates ───
+async function updateBadges() {
+  try {
+    const stats = await api('GET', '/stats');
+    STATE.stats = stats;
+    document.getElementById('badge-incidents').textContent = stats.open_incidents || 0;
+    document.getElementById('badge-alerts').textContent = stats.new_alerts || 0;
+    document.getElementById('badge-executions').textContent = stats.active_executions || 0;
+    document.getElementById('threat-score-val').textContent = stats.threat_score || 0;
+  } catch {}
+}
+
+// ─────────────────── DASHBOARD ───────────────────
+
+async function loadDashboard() {
+  try {
+    const stats = await api('GET', '/stats');
+    STATE.stats = stats;
+    document.getElementById('stat-critical').textContent = stats.critical_incidents;
+    document.getElementById('stat-open').textContent = stats.open_incidents;
+    document.getElementById('stat-open-sub').textContent = `${stats.incidents_24h} new in last 24h`;
+    document.getElementById('stat-alerts24').textContent = stats.alerts_24h;
+    document.getElementById('stat-pb-rate').innerHTML = `${stats.execution_success_rate}<span style="font-size:16px">%</span>`;
+    document.getElementById('stat-pb-sub').textContent = `${stats.total_executions} total executions`;
+    document.getElementById('stat-mttr').innerHTML = `${stats.avg_mttr_hours}<span style="font-size:14px">h</span>`;
+    document.getElementById('stat-active-exec').textContent = stats.active_executions;
+    document.getElementById('threat-score-val').textContent = stats.threat_score;
+    document.getElementById('badge-incidents').textContent = stats.open_incidents;
+    document.getElementById('badge-alerts').textContent = stats.new_alerts;
+    document.getElementById('badge-executions').textContent = stats.active_executions;
+
+    await Promise.all([
+      loadMetricChart(),
+      loadCategoryChart(),
+      loadRecentIncidents(),
+      loadPBActivity(),
+    ]);
+  } catch(e) {}
+}
+
+async function loadMetricChart() {
+  const metric = document.getElementById('chart-metric-select')?.value || 'daily_alerts';
+  const data = await api('GET', `/stats/metrics?metric_type=${metric}&days=30`);
+  renderLineChart('metric-chart', data);
+}
+
+function renderLineChart(containerId, data) {
+  const container = document.getElementById(containerId);
+  if (!container || !data || data.length === 0) return;
+  const vals = data.map(d => d.value);
+  const maxV = Math.max(...vals) || 1;
+  const minV = Math.min(...vals);
+  const W = container.clientWidth || 400;
+  const H = 130;
+  const pad = { l: 36, r: 12, t: 10, b: 24 };
+  const chartW = W - pad.l - pad.r;
+  const chartH = H - pad.t - pad.b;
+  const step = chartW / (data.length - 1 || 1);
+
+  const points = data.map((d, i) => ({
+    x: pad.l + i * step,
+    y: pad.t + chartH - ((d.value - minV) / (maxV - minV || 1)) * chartH,
+    v: d.value,
+    label: d.labels?.day?.slice(5) || '',
+  }));
+
+  const lineP = points.map(p => `${p.x},${p.y}`).join(' ');
+  const areaP = `${points[0].x},${pad.t+chartH} ` + points.map(p => `${p.x},${p.y}`).join(' ') + ` ${points[points.length-1].x},${pad.t+chartH}`;
+
+  // Y-axis labels
+  const yLabels = [maxV, Math.round((maxV+minV)/2), Math.round(minV)].map((v,i) => ({
+    y: pad.t + i * chartH/2,
+    v: Math.round(v),
+  }));
+
+  // X-axis labels (every 5th)
+  const xLabels = points.filter((_, i) => i % 5 === 0 || i === points.length-1);
+
+  container.innerHTML = `<svg class="chart-svg" viewBox="0 0 ${W} ${H}">
+    <defs>
+      <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(59,130,246,0.4)"/>
+        <stop offset="100%" stop-color="rgba(59,130,246,0)"/>
+      </linearGradient>
+    </defs>
+    <!-- Grid lines -->
+    ${yLabels.map(l => `<line x1="${pad.l}" y1="${l.y}" x2="${W-pad.r}" y2="${l.y}" stroke="rgba(56,100,180,0.15)" stroke-dasharray="4,4"/>`).join('')}
+    <!-- Y labels -->
+    ${yLabels.map(l => `<text x="${pad.l-4}" y="${l.y+4}" font-size="9" fill="var(--text-muted)" text-anchor="end">${l.v}</text>`).join('')}
+    <!-- Area -->
+    <polygon points="${areaP}" fill="url(#areaGrad)" class="chart-area"/>
+    <!-- Line -->
+    <polyline points="${lineP}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Dots -->
+    ${points.map(p => `<circle cx="${p.x}" cy="${p.y}" r="3" fill="var(--accent)" stroke="var(--bg-card)" stroke-width="2" class="chart-dot"><title>${p.v}</title></circle>`).join('')}
+    <!-- X labels -->
+    ${xLabels.map(p => `<text x="${p.x}" y="${H-4}" font-size="9" fill="var(--text-muted)" text-anchor="middle">${p.label}</text>`).join('')}
+  </svg>`;
+}
+
+async function loadCategoryChart() {
+  const data = await api('GET', '/stats/category_distribution');
+  const container = document.getElementById('category-chart');
+  if (!container || !data || data.length === 0) return;
+
+  const total = data.reduce((s, d) => s + d.count, 0) || 1;
+  const colors = ['#ef4444','#f97316','#f59e0b','#3b82f6','#8b5cf6','#06b6d4','#22c55e','#ec4899','#a3e635','#fb923c'];
+  const catLabels = { malware:'Malware', ransomware:'Ransomware', phishing:'Phishing', brute_force:'Brute Force', data_exfiltration:'Data Exfil', lateral_movement:'Lateral Move', unknown:'Unknown', privilege_escalation:'Priv Esc', reconnaissance:'Recon' };
+
+  container.innerHTML = `<div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;width:100%">
+    <svg width="120" height="120" viewBox="0 0 120 120">
+      ${(() => {
+        let offset = 0;
+        const circumference = 2 * Math.PI * 46;
+        return data.slice(0,8).map((d,i) => {
+          const pct = d.count / total;
+          const len = pct * circumference;
+          const dash = `${len} ${circumference - len}`;
+          const startOffset = offset;
+          offset += len;
+          return `<circle cx="60" cy="60" r="46" fill="none" stroke="${colors[i%colors.length]}" stroke-width="16" stroke-dasharray="${dash}" stroke-dashoffset="${-startOffset + circumference/4}" transform="rotate(-90 60 60)"><title>${catLabels[d.category]||d.category}: ${d.count}</title></circle>`;
+        }).join('');
+      })()}
+      <text x="60" y="55" font-size="18" fill="var(--text-primary)" text-anchor="middle" font-weight="700">${total}</text>
+      <text x="60" y="72" font-size="9" fill="var(--text-muted)" text-anchor="middle">TOTAL</text>
+    </svg>
+    <div style="flex:1;display:flex;flex-direction:column;gap:5px">
+      ${data.slice(0,6).map((d,i) => `
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px">
+          <div style="width:8px;height:8px;border-radius:2px;background:${colors[i%colors.length]};flex-shrink:0"></div>
+          <span style="color:var(--text-secondary);flex:1">${catLabels[d.category]||d.category}</span>
+          <span style="color:var(--text-muted)">${d.count}</span>
+          <span style="color:var(--text-muted);font-size:10px">${Math.round(d.count/total*100)}%</span>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+async function loadRecentIncidents() {
+  const data = await api('GET', '/incidents?limit=5');
+  const tbody = document.getElementById('recent-incidents-body');
+  if (!data?.items?.length) {
+    tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state" style="padding:20px"><p>No incidents</p></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.items.map(i => `<tr style="cursor:pointer" onclick="openIncidentModal('${i.id}')">
+    <td><span style="font-size:12px;font-family:var(--font-mono);color:var(--text-muted)">${i.id}</span><br><span style="font-size:12.5px">${i.title.length>55?i.title.slice(0,55)+'...':i.title}</span></td>
+    <td>${severityBadge(i.severity)}</td>
+    <td>${statusBadge(i.status)}</td>
+    <td style="font-size:12px">${i.assigned_to||'<span style="color:var(--text-muted)">Unassigned</span>'}</td>
+    <td class="alert-age">${timeAgo(i.created_at)}</td>
+  </tr>`).join('');
+}
+
+async function loadPBActivity() {
+  const data = await api('GET', '/playbooks');
+  const container = document.getElementById('pb-activity');
+  if (!data?.length) { container.innerHTML = '<div class="empty-state" style="padding:20px"><p>No playbooks</p></div>'; return; }
+  container.innerHTML = data.slice(0,5).map(pb => {
+    const rate = pb.execution_count ? Math.round(pb.success_count/pb.execution_count*100) : 0;
+    return `<div style="display:flex;flex-direction:column;gap:4px;padding:8px;background:var(--bg-surface);border-radius:var(--radius);border:1px solid var(--border);cursor:pointer" onclick="openPlaybookModal('${pb.id}')">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:12.5px;font-weight:500">${pb.name}</span>
+        <span style="font-size:11px;color:var(--text-muted)">${pb.execution_count} runs</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:${rate}%;background:${rate>=95?'var(--success)':rate>=80?'var(--warning)':'var(--danger)'}"></div></div>
+        <span style="font-size:11px;color:var(--text-muted)">${rate}%</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─────────────────── INCIDENTS ───────────────────
+
+let incFilterActive = { status: '', severity: '' };
+
+function setIncFilter(key, val) {
+  incFilterActive[key] = val;
+  // Update chip UI
+  document.querySelectorAll(`[data-filter="${key}"]`).forEach(c => c.classList.remove('active'));
+  document.querySelectorAll(`[data-filter="${key}"][data-val="${val}"]`).forEach(c => c.classList.add('active'));
+  loadIncidents();
+}
+
+async function loadIncidents() {
+  const q = new URLSearchParams();
+  if (incFilterActive.status) q.set('status', incFilterActive.status);
+  if (incFilterActive.severity) q.set('severity', incFilterActive.severity);
+  q.set('limit', '100');
+  const data = await api('GET', `/incidents?${q}`);
+  STATE.incidents = data.items || [];
+  renderIncidentsTable(STATE.incidents);
+}
+
+function filterIncidents() {
+  const q = document.getElementById('inc-search')?.value?.toLowerCase() || '';
+  const filtered = STATE.incidents.filter(i =>
+    !q || i.title.toLowerCase().includes(q) || i.id.toLowerCase().includes(q)
+  );
+  renderIncidentsTable(filtered);
+}
+
+function renderIncidentsTable(items) {
+  const tbody = document.getElementById('incidents-body');
+  if (!items.length) {
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state" style="padding:30px"><div class="icon">🛡️</div><h3>No incidents found</h3></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = items.map(i => {
+    const isCritical = i.severity === 'critical' && ['new','triaging','investigating'].includes(i.status);
+    return `<tr class="${isCritical?'critical-glow':''}" style="cursor:pointer" onclick="openIncidentModal('${i.id}')">
+      <td><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">${i.id}</span></td>
+      <td style="max-width:280px"><span class="status-dot status-${i.status}"></span>${i.title.length>65?i.title.slice(0,65)+'...':i.title}</td>
+      <td>${severityBadge(i.severity)}</td>
+      <td>${statusBadge(i.status)}</td>
+      <td><span style="font-size:12px">${categoryLabel(i.category)}</span></td>
+      <td style="font-size:12px">${i.assigned_to||'<span style="color:var(--text-muted)">Unassigned</span>'}</td>
+      <td>${riskBar(i.risk_score)}</td>
+      <td class="alert-age">${timeAgo(i.created_at)}</td>
+      <td onclick="event.stopPropagation()">
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-xs btn-secondary" onclick="openIncidentModal('${i.id}')">View</button>
+          <button class="btn btn-xs btn-primary" onclick="runPlaybookForIncident('${i.id}','${i.category}')">▶</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function runPlaybookForIncident(incId, category) {
+  // Find matching playbook
+  const pbMap = { ransomware:'pb-ransomware-response', phishing:'pb-phishing-investigation', brute_force:'pb-brute-force-response', data_exfiltration:'pb-data-exfiltration', malware:'pb-malware-triage' };
+  const pbId = pbMap[category] || 'pb-malware-triage';
+  openRunPlaybookModal(pbId, incId);
+}
+
+async function openIncidentModal(incId) {
+  document.getElementById('modal-inc-title').textContent = 'Loading...';
+  document.getElementById('modal-inc-id').textContent = incId;
+  document.getElementById('modal-inc-body').innerHTML = '<div class="loading-overlay"><div class="spinner"></div> Loading...</div>';
+  openModal('modal-incident');
+  try {
+    const inc = await api('GET', `/incidents/${incId}`);
+    renderIncidentModal(inc);
+  } catch(e) {
+    document.getElementById('modal-inc-body').innerHTML = `<div class="empty-state"><p>Failed to load: ${e.message}</p></div>`;
+  }
+}
+
+function renderIncidentModal(inc) {
+  document.getElementById('modal-inc-title').textContent = inc.title;
+  document.getElementById('modal-inc-id').textContent = inc.id;
+
+  const execCount = (inc.executions||[]).length;
+  const body = document.getElementById('modal-inc-body');
+
+  body.innerHTML = `
+    <div class="incident-header inc-${inc.severity}" style="margin-bottom:20px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+            ${severityBadge(inc.severity)} ${statusBadge(inc.status)}
+            <span class="badge badge-muted">${categoryLabel(inc.category)}</span>
+            ${(inc.tags||[]).map(t=>`<span class="badge badge-purple">${t}</span>`).join('')}
+          </div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">${inc.description||'No description.'}</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--text-muted)">
+            <span>📅 ${fmtDate(inc.created_at)}</span>
+            <span>👤 ${inc.assigned_to||'Unassigned'}</span>
+            <span>🏠 ${(inc.affected_assets||[]).join(', ')||'—'}</span>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">RISK SCORE</div>
+          <div style="font-size:32px;font-weight:700;color:${inc.risk_score>=80?'var(--danger)':inc.risk_score>=60?'var(--warning)':'var(--success)'}">${Math.round(inc.risk_score||0)}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+      <button class="btn btn-primary btn-sm" onclick="runPlaybookForIncident('${inc.id}','${inc.category}')">▶ Execute Playbook</button>
+      <select style="width:auto;font-size:12px;padding:5px 10px" id="inc-status-sel" onchange="updateIncidentStatus('${inc.id}',this.value)">
+        <option value="">Update Status...</option>
+        <option value="new">New</option>
+        <option value="triaging">Triaging</option>
+        <option value="investigating">Investigating</option>
+        <option value="contained">Contained</option>
+        <option value="resolved">Resolved</option>
+        <option value="closed">Closed</option>
+        <option value="false_positive">False Positive</option>
+      </select>
+      <select style="width:auto;font-size:12px;padding:5px 10px" id="inc-assign-sel" onchange="assignIncident('${inc.id}',this.value)">
+        <option value="">Assign to...</option>
+        <option value="Sarah Chen">Sarah Chen</option>
+        <option value="Marcus Rivera">Marcus Rivera</option>
+        <option value="Elena Vasquez">Elena Vasquez</option>
+        <option value="James Park">James Park</option>
+        <option value="analyst:admin">Me (admin)</option>
+      </select>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <div class="tab active" onclick="switchIncTab(this,'itab-overview')">Overview</div>
+      <div class="tab" onclick="switchIncTab(this,'itab-timeline')">Timeline ${(inc.timeline||[]).length?`<span class="nav-badge accent">${(inc.timeline||[]).length}</span>`:''}</div>
+      <div class="tab" onclick="switchIncTab(this,'itab-iocs')">IOCs ${(inc.iocs||[]).length?`<span class="nav-badge">${(inc.iocs||[]).length}</span>`:''}</div>
+      <div class="tab" onclick="switchIncTab(this,'itab-playbooks')">Playbooks ${execCount?`<span class="nav-badge accent">${execCount}</span>`:''}</div>
+      <div class="tab" onclick="switchIncTab(this,'itab-notes')">Notes</div>
+    </div>
+
+    <div id="itab-overview">
+      <div class="grid-2">
+        <div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">MITRE ATT&CK TACTICS</div>
+          <div>${(inc.mitre_tactics||[]).map(t=>`<span class="mitre-tag">${t}</span>`).join('')||'<span style="color:var(--text-muted);font-size:12px">None mapped</span>'}</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:12px;margin-bottom:8px">MITRE TECHNIQUES</div>
+          <div>${(inc.mitre_techniques||[]).map(t=>`<span class="mitre-tag">${t}</span>`).join('')||'<span style="color:var(--text-muted);font-size:12px">None mapped</span>'}</div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">AFFECTED ASSETS</div>
+          ${(inc.affected_assets||[]).map(a=>`<div style="padding:6px 10px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius);font-size:12px;margin-bottom:4px;font-family:var(--font-mono)">${a}</div>`).join('')||'<span style="color:var(--text-muted);font-size:12px">None listed</span>'}
+        </div>
+      </div>
+      ${inc.resolution_summary?`<div style="margin-top:16px;padding:12px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:var(--radius)"><div style="font-size:11px;color:var(--success);margin-bottom:6px;font-weight:600">RESOLUTION SUMMARY</div><div style="font-size:13px">${inc.resolution_summary}</div></div>`:''}
+    </div>
+
+    <div id="itab-timeline" style="display:none">
+      <div class="timeline">
+        ${(inc.timeline||[]).slice().reverse().map(t=>`
+          <div class="timeline-item">
+            <div class="timeline-dot ${t.actor==='analyst:admin'||t.actor?.startsWith('analyst')?'analyst':t.actor==='SENTINEL-X'?'':''} "></div>
+            <div class="timeline-time">${fmtDate(t.time)}</div>
+            <div class="timeline-event">${t.event}</div>
+            <div class="timeline-actor">${t.actor||'system'}</div>
+          </div>`).join('')||'<p style="color:var(--text-muted);font-size:13px">No timeline events.</p>'}
+      </div>
+    </div>
+
+    <div id="itab-iocs" style="display:none">
+      <div class="ioc-grid">
+        ${(inc.iocs||[]).map(ioc=>`
+          <div class="ioc-item">
+            <span class="ioc-type badge badge-muted">${ioc.type||'?'}</span>
+            <span class="ioc-value">${ioc.value||'—'}</span>
+            <span class="ioc-context">${ioc.context||''}</span>
+            <button class="btn btn-xs btn-secondary" onclick="lookupIOCQuick('${ioc.type}','${ioc.value}')">🔍</button>
+          </div>`).join('')||'<div class="empty-state" style="padding:20px"><p>No IOCs recorded.</p></div>'}
+      </div>
+    </div>
+
+    <div id="itab-playbooks" style="display:none">
+      ${(inc.executions||[]).length?`<div class="step-list">
+        ${(inc.executions||[]).map(e=>`
+          <div class="step-item" style="cursor:pointer" onclick="openExecutionModal('${e.id}')">
+            <div class="step-num ${e.status==='success'?'success':e.status==='failed'?'failed':e.status==='running'?'running':''}">
+              ${e.status==='success'?'✓':e.status==='failed'?'✗':e.status==='running'?'▶':'·'}
+            </div>
+            <div class="step-info">
+              <div class="step-name">${e.playbook_id?.replace('pb-','').replace(/-/g,' ')?.split(' ').map(w=>w[0]?.toUpperCase()+w.slice(1)).join(' ') || e.playbook_id}</div>
+              <div class="step-desc">${fmtDate(e.started_at)} · Triggered by ${e.triggered_by}</div>
+            </div>
+            <div class="step-meta">
+              ${statusBadge(e.status)}
+              ${execProgress(e)}
+            </div>
+          </div>`).join('')}
+      </div>`:'<div class="empty-state" style="padding:20px"><p>No playbooks executed for this incident.</p><button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="runPlaybookForIncident(\''+inc.id+'\',\''+inc.category+'\')">▶ Execute Playbook</button></div>'}
+    </div>
+
+    <div id="itab-notes" style="display:none">
+      <textarea id="inc-notes-input" rows="6" style="margin-bottom:10px" placeholder="Add analyst notes...">${inc.notes||''}</textarea>
+      <button class="btn btn-primary btn-sm" onclick="saveIncidentNotes('${inc.id}')">Save Notes</button>
+    </div>
+  `;
+}
+
+function switchIncTab(el, tabId) {
+  el.closest('.modal-body').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['itab-overview','itab-timeline','itab-iocs','itab-playbooks','itab-notes'].forEach(id=>{
+    const e = document.getElementById(id);
+    if(e) e.style.display = id===tabId?'block':'none';
+  });
+}
+
+async function updateIncidentStatus(incId, status) {
+  if (!status) return;
+  try {
+    await api('PATCH', `/incidents/${incId}`, { status });
+    toast('success', 'Status Updated', `Incident status set to ${status}`);
+    closeModal('modal-incident');
+    loadIncidents();
+  } catch(e) {}
+}
+
+async function assignIncident(incId, analyst) {
+  if (!analyst) return;
+  try {
+    await api('PATCH', `/incidents/${incId}`, { assigned_to: analyst });
+    toast('success', 'Assigned', `Incident assigned to ${analyst}`);
+    await openIncidentModal(incId);
+  } catch(e) {}
+}
+
+async function saveIncidentNotes(incId) {
+  const notes = document.getElementById('inc-notes-input')?.value || '';
+  try {
+    await api('PATCH', `/incidents/${incId}`, { notes });
+    toast('success', 'Notes Saved', '');
+  } catch(e) {}
+}
+
+function openIncidentModal(incId) {
+  document.getElementById('modal-inc-title').textContent = 'Loading...';
+  document.getElementById('modal-inc-id').textContent = incId;
+  document.getElementById('modal-inc-body').innerHTML = '<div class="loading-overlay"><div class="spinner"></div></div>';
+  openModal('modal-incident');
+  api('GET', `/incidents/${incId}`).then(renderIncidentModal).catch(e => {
+    document.getElementById('modal-inc-body').innerHTML = `<div class="empty-state"><p>${e.message}</p></div>`;
+  });
+}
+
+// ─────────────────── ALERTS ───────────────────
+
+let alertFilterActive = { status: '', severity: '' };
+
+function setAlertFilter(key, val) {
+  alertFilterActive[key] = val;
+  document.querySelectorAll(`[data-filter="a${key}"]`).forEach(c => c.classList.remove('active'));
+  document.querySelectorAll(`[data-filter="a${key}"][data-val="${val}"]`).forEach(c => c.classList.add('active'));
+  loadAlerts();
+}
+
+async function loadAlerts() {
+  const q = new URLSearchParams();
+  if (alertFilterActive.status) q.set('status', alertFilterActive.status);
+  if (alertFilterActive.severity) q.set('severity', alertFilterActive.severity);
+  q.set('limit', '100');
+  const data = await api('GET', `/alerts?${q}`);
+  STATE.alerts = data.items || [];
+  renderAlertsTable(STATE.alerts);
+}
+
+function filterAlerts() {
+  const q = document.getElementById('alert-search')?.value?.toLowerCase() || '';
+  const filtered = STATE.alerts.filter(a =>
+    !q || a.title.toLowerCase().includes(q) || (a.source_ip||'').includes(q)
+  );
+  renderAlertsTable(filtered);
+}
+
+function renderAlertsTable(items) {
+  const tbody = document.getElementById('alerts-body');
+  if (!items.length) {
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state" style="padding:30px"><div class="icon">⚠️</div><h3>No alerts found</h3></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = items.map(a => `<tr class="alert-row" onclick="openAlertModal('${a.id}')">
+    <td style="max-width:250px">
+      <div style="font-size:12.5px;font-weight:500">${a.title.length>50?a.title.slice(0,50)+'...':a.title}</div>
+      <div style="font-size:11px;color:var(--text-muted)">${a.category||''}</div>
+    </td>
+    <td style="font-size:12px"><span class="badge badge-muted">${a.source||'Unknown'}</span></td>
+    <td>${severityBadge(a.severity)}</td>
+    <td>${statusBadge(a.status)}</td>
+    <td style="font-size:12px;font-family:var(--font-mono)">${a.affected_host||'—'}</td>
+    <td style="font-size:12px;font-family:var(--font-mono)">${a.source_ip||'—'}</td>
+    <td>${riskBar(a.risk_score)}</td>
+    <td class="alert-age">${timeAgo(a.created_at)}</td>
+    <td onclick="event.stopPropagation()">
+      <div style="display:flex;gap:4px">
+        <button class="btn btn-xs btn-success" onclick="acknowledgeAlert('${a.id}')">Ack</button>
+        <button class="btn btn-xs btn-danger" onclick="escalateAlert('${a.id}')">Escalate</button>
+      </div>
+    </td>
+  </tr>`).join('');
+}
+
+async function acknowledgeAlert(id) {
+  await api('PATCH', `/alerts/${id}`, { status: 'acknowledged' });
+  toast('info', 'Alert Acknowledged', '');
+  loadAlerts();
+}
+
+async function escalateAlert(id) {
+  try {
+    const r = await api('POST', `/alerts/${id}/escalate`);
+    toast('warning', 'Alert Escalated', `Incident ${r.incident.id} created`);
+    loadAlerts();
+    updateBadges();
+  } catch(e) {}
+}
+
+function openAlertModal(alertId) {
+  document.getElementById('modal-alert-title').textContent = 'Loading...';
+  document.getElementById('modal-alert-id').textContent = alertId;
+  document.getElementById('modal-alert-body').innerHTML = '<div class="loading-overlay"><div class="spinner"></div></div>';
+  openModal('modal-alert');
+  api('GET', `/alerts/${alertId}`).then(a => {
+    document.getElementById('modal-alert-title').textContent = a.title;
+    document.getElementById('modal-alert-body').innerHTML = `
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        ${severityBadge(a.severity)} ${statusBadge(a.status)}
+        <span class="badge badge-muted">${a.source||'Unknown'}</span>
+        <span class="badge badge-muted">${categoryLabel(a.category)}</span>
+      </div>
+      <div class="form-row" style="margin-bottom:14px">
+        <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">AFFECTED HOST</div><div style="font-family:var(--font-mono);font-size:13px">${a.affected_host||'—'}</div></div>
+        <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">AFFECTED USER</div><div style="font-family:var(--font-mono);font-size:13px">${a.affected_user||'—'}</div></div>
+        <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">SOURCE IP</div><div style="font-family:var(--font-mono);font-size:13px;color:var(--danger)">${a.source_ip||'—'}</div></div>
+        <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px">DEST IP</div><div style="font-family:var(--font-mono);font-size:13px">${a.dest_ip||'—'}</div></div>
+      </div>
+      <div style="margin-bottom:14px"><div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">DESCRIPTION</div><div style="font-size:13px">${a.description||'No description.'}</div></div>
+      ${a.enrichment_data && Object.keys(a.enrichment_data).length ? `
+        <div style="margin-bottom:14px">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">ENRICHMENT DATA</div>
+          <pre>${JSON.stringify(a.enrichment_data, null, 2)}</pre>
+        </div>` : ''}
+      ${a.raw_data && Object.keys(a.raw_data).length ? `
+        <div style="margin-bottom:14px">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">RAW EVENT DATA</div>
+          <pre>${JSON.stringify(a.raw_data, null, 2)}</pre>
+        </div>` : ''}
+      <div style="display:flex;gap:8px;margin-top:16px">
+        <button class="btn btn-success btn-sm" onclick="acknowledgeAlert('${a.id}');closeModal('modal-alert')">✓ Acknowledge</button>
+        <button class="btn btn-danger btn-sm" onclick="escalateAlert('${a.id}');closeModal('modal-alert')">↑ Escalate to Incident</button>
+        <button class="btn btn-secondary btn-sm" onclick="lookupIOCQuick('ip','${a.source_ip||''}')">🔍 Lookup IP</button>
+      </div>`;
+  });
+}
+
+// ─────────────────── PLAYBOOKS ───────────────────
+
+async function loadPlaybooks() {
+  const data = await api('GET', '/playbooks');
+  STATE.playbooks = data || [];
+  renderPlaybooksGrid(STATE.playbooks);
+}
+
+function renderPlaybooksGrid(items) {
+  const container = document.getElementById('playbooks-grid');
+  if (!items.length) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">▶️</div><h3>No playbooks</h3></div>';
+    return;
+  }
+  const catColors = { ransomware:'var(--danger)', phishing:'var(--warning)', brute_force:'var(--accent)', data_exfiltration:'var(--purple)', malware:'var(--orange)', unknown:'var(--text-muted)' };
+  container.innerHTML = items.map(pb => {
+    const rate = pb.execution_count ? Math.round(pb.success_count/pb.execution_count*100) : 0;
+    const color = catColors[pb.category] || 'var(--accent)';
+    return `<div class="card" style="cursor:pointer;border-top:3px solid ${color}" onclick="openPlaybookModal('${pb.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600;margin-bottom:4px">${pb.name}</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            ${statusBadge(pb.status)}
+            <span class="badge badge-muted">v${pb.version}</span>
+            <span class="badge badge-muted">${categoryLabel(pb.category)}</span>
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-size:20px;font-weight:700;color:${rate>=95?'var(--success)':rate>=80?'var(--warning)':'var(--danger)'}">${rate}%</div>
+          <div style="font-size:10px;color:var(--text-muted)">SUCCESS</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;line-height:1.5">${pb.description?.slice(0,100)||''}${pb.description?.length>100?'...':''}</div>
+      <div style="display:flex;gap:16px;font-size:12px;color:var(--text-muted);margin-bottom:12px">
+        <span>📊 ${pb.execution_count} runs</span>
+        <span>⏱ ${pb.avg_execution_time}s avg</span>
+        <span>📋 ${(pb.steps||[]).length} steps</span>
+      </div>
+      <div class="progress-bar" style="margin-bottom:10px"><div class="progress-fill" style="width:${rate}%;background:${rate>=95?'var(--success)':rate>=80?'var(--warning)':'var(--danger)'}"></div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${(pb.tags||[]).slice(0,3).map(t=>`<span class="badge badge-muted" style="font-size:10px">${t}</span>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openPlaybookModal(pbId) {
+  document.getElementById('modal-pb-title').textContent = 'Loading...';
+  document.getElementById('modal-pb-id').textContent = pbId;
+  document.getElementById('modal-pb-body').innerHTML = '<div class="loading-overlay"><div class="spinner"></div></div>';
+  openModal('modal-playbook');
+  api('GET', `/playbooks/${pbId}`).then(renderPlaybookModal).catch(e => {
+    document.getElementById('modal-pb-body').innerHTML = `<div class="empty-state"><p>${e.message}</p></div>`;
+  });
+}
+
+function renderPlaybookModal(pb) {
+  STATE.selectedPlaybookId = pb.id;
+  document.getElementById('modal-pb-title').textContent = pb.name;
+  document.getElementById('modal-pb-id').textContent = `v${pb.version} · ${pb.author} · ${pb.execution_count} executions`;
+
+  const rate = pb.execution_count ? Math.round(pb.success_count/pb.execution_count*100) : 0;
+  const stepTypeColors = { triage:'var(--warning)',enrich:'var(--accent)',contain:'var(--danger)',investigate:'var(--purple)',notify:'var(--cyan)',manual:'var(--orange)',remediate:'var(--success)',report:'var(--text-muted)',share:'var(--pink)' };
+
+  document.getElementById('modal-pb-body').innerHTML = `
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      ${statusBadge(pb.status)}
+      <span class="badge badge-muted">${categoryLabel(pb.category)}</span>
+      ${(pb.tags||[]).map(t=>`<span class="badge badge-muted">${t}</span>`).join('')}
+    </div>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">${pb.description}</div>
+
+    <!-- Stats row -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+      <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center">
+        <div style="font-size:22px;font-weight:700">${pb.execution_count}</div>
+        <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase">Executions</div>
+      </div>
+      <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center">
+        <div style="font-size:22px;font-weight:700;color:${rate>=95?'var(--success)':rate>=80?'var(--warning)':'var(--danger)'}">${rate}%</div>
+        <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase">Success Rate</div>
+      </div>
+      <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center">
+        <div style="font-size:22px;font-weight:700">${pb.avg_execution_time}s</div>
+        <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase">Avg Duration</div>
+      </div>
+      <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center">
+        <div style="font-size:22px;font-weight:700">${(pb.steps||[]).length}</div>
+        <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase">Steps</div>
+      </div>
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab active" onclick="switchPBTab(this,'pbtab-steps')">Workflow Steps</div>
+      <div class="tab" onclick="switchPBTab(this,'pbtab-flow')">Visual Flow</div>
+      <div class="tab" onclick="switchPBTab(this,'pbtab-trigger')">Trigger Rules</div>
+      <div class="tab" onclick="switchPBTab(this,'pbtab-history')">Execution History</div>
+    </div>
+
+    <!-- Steps tab -->
+    <div id="pbtab-steps">
+      <div class="step-list">
+        ${(pb.steps||[]).map((s,i)=>`
+          <div class="step-item ${s.simulated?'simulated':''}">
+            <div class="step-num" style="background:${stepTypeColors[s.type]||'var(--text-muted)'};color:white">${i+1}</div>
+            <div class="step-info">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="step-name">${s.name}</span>
+                ${s.simulated?'<span class="badge badge-warning" style="font-size:10px">SIMULATED</span>':''}
+                ${!s.automated?'<span class="badge badge-muted" style="font-size:10px">MANUAL</span>':''}
+              </div>
+              <div class="step-desc">${s.description||''}</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:3px">
+                Action: <code style="color:var(--accent-bright)">${s.action}</code> · 
+                Type: <span style="color:${stepTypeColors[s.type]||'var(--text-muted)'}">${s.type}</span> · 
+                Timeout: ${s.timeout}s
+              </div>
+            </div>
+          </div>`).join('')}
+      </div>
+      <div style="margin-top:16px;display:flex;gap:8px">
+        <button class="btn btn-primary" onclick="openRunPlaybookModal('${pb.id}')">▶ Execute Now</button>
+      </div>
+    </div>
+
+    <!-- Flow tab -->
+    <div id="pbtab-flow" style="display:none">
+      <div class="sim-banner">🔍 Visual representation of playbook workflow. Click "Execute Now" to run with live step tracking.</div>
+      <div class="flow-container">
+        <div class="flow-nodes">
+          <div class="flow-node trigger">
+            <span>⚡</span> <span>TRIGGER</span> <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">${(pb.trigger_conditions?.category||[]).join(', ')||'Manual'}</span>
+          </div>
+          ${(pb.steps||[]).map(s=>`
+            <div class="flow-connector"></div>
+            <div class="flow-node ${s.type||'enrich'}">
+              <span>${{triage:'🔎',enrich:'🔍',contain:'🔒',investigate:'🔬',notify:'📢',manual:'👤',remediate:'🛠️',report:'📄',share:'📤'}[s.type]||'•'}</span>
+              <span>${s.name}</span>
+              ${s.simulated?'<span class="badge badge-warning" style="font-size:9px;margin-left:auto">SIM</span>':''}
+              ${!s.automated?'<span class="badge badge-muted" style="font-size:9px;margin-left:auto">MANUAL</span>':''}
+            </div>`).join('')}
+          <div class="flow-connector"></div>
+          <div class="flow-node end"><span>✓</span> <span>COMPLETE</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trigger Rules tab -->
+    <div id="pbtab-trigger" style="display:none">
+      <pre>${JSON.stringify(pb.trigger_conditions||{}, null, 2)}</pre>
+    </div>
+
+    <!-- History tab -->
+    <div id="pbtab-history" style="display:none">
+      ${(pb.recent_executions||[]).length ? `
+        <div class="step-list">
+          ${(pb.recent_executions||[]).map(e=>`
+            <div class="step-item" style="cursor:pointer" onclick="openExecutionModal('${e.id}')">
+              <div class="step-num ${e.status==='success'?'success':e.status==='failed'?'failed':e.status==='running'?'running':''}">${e.status==='success'?'✓':e.status==='failed'?'✗':'·'}</div>
+              <div class="step-info">
+                <div class="step-name">${e.id}</div>
+                <div class="step-desc">${fmtDate(e.started_at)} · ${e.triggered_by} ${e.execution_time?`· ${e.execution_time}s`:''}</div>
+              </div>
+              <div class="step-meta">${statusBadge(e.status)} ${execProgress(e)}</div>
+            </div>`).join('')}
+        </div>` : '<div class="empty-state" style="padding:20px"><p>No execution history.</p></div>'}
+    </div>
+  `;
+}
+
+function switchPBTab(el, tabId) {
+  el.closest('.modal-body').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['pbtab-steps','pbtab-flow','pbtab-trigger','pbtab-history'].forEach(id=>{
+    const e = document.getElementById(id);
+    if(e) e.style.display = id===tabId?'block':'none';
+  });
+}
+
+function openRunPlaybookModal(pbId, incId) {
+  STATE.selectedPlaybookId = pbId;
+  closeModal('modal-playbook');
+  const pb = STATE.playbooks.find(p=>p.id===pbId);
+  document.getElementById('run-pb-info').innerHTML = pb ? `
+    <div style="font-size:14px;font-weight:600;margin-bottom:4px">${pb.name}</div>
+    <div style="font-size:12px;color:var(--text-muted)">${pb.description?.slice(0,120)||''}</div>
+  ` : `<div style="font-size:13px;color:var(--text-muted)">${pbId}</div>`;
+
+  // Populate incident dropdown
+  const sel = document.getElementById('run-inc-id');
+  sel.innerHTML = '<option value="">— None (standalone execution) —</option>';
+  STATE.incidents.forEach(i => {
+    const opt = document.createElement('option');
+    opt.value = i.id;
+    opt.textContent = `${i.id} — ${i.title.slice(0,40)}`;
+    if (incId && i.id === incId) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  openModal('modal-run-playbook');
+}
+
+async function submitRunPlaybook() {
+  const pbId = STATE.selectedPlaybookId;
+  const incId = document.getElementById('run-inc-id').value || null;
+  const analyst = document.getElementById('run-analyst').value || 'analyst:admin';
+  const btn = document.getElementById('run-pb-submit');
+  btn.disabled = true;
+  btn.textContent = '⚙️ Executing...';
+  try {
+    const r = await api('POST', '/executions', {
+      playbook_id: pbId,
+      incident_id: incId,
+      triggered_by: analyst,
+      context: {},
+    });
+    closeModal('modal-run-playbook');
+    toast('success', 'Playbook Triggered', `Execution ${r.id} started`);
+    showLiveExecPanel(r.id, pbId, 0, r.total_steps||0);
+  } catch(e) {
+    toast('error', 'Failed to execute', e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '▶ Execute Now';
+  }
+}
+
+// ─────────────────── EXECUTIONS ───────────────────
+
+let execFilterActive = '';
+
+function setExecFilter(val) {
+  execFilterActive = val;
+  document.querySelectorAll('[data-eval]').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll(`[data-eval="${val}"]`).forEach(c => c.classList.add('active'));
+  loadExecutions();
+}
+
+async function loadExecutions() {
+  const q = new URLSearchParams();
+  if (execFilterActive) q.set('status', execFilterActive);
+  q.set('limit', '100');
+  const data = await api('GET', `/executions?${q}`);
+  STATE.executions = data || [];
+  renderExecutionsTable(STATE.executions);
+}
+
+function renderExecutionsTable(items) {
+  const tbody = document.getElementById('executions-body');
+  if (!items.length) {
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state" style="padding:30px"><div class="icon">⚙️</div><h3>No executions found</h3></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = items.map(e => {
+    const pbName = e.playbook_id?.replace('pb-','').replace(/-/g,' ')?.split(' ').map(w=>w[0]?.toUpperCase()+w.slice(1)).join(' ') || e.playbook_id;
+    return `<tr style="cursor:pointer" onclick="openExecutionModal('${e.id}')">
+      <td><span style="font-family:var(--font-mono);font-size:11px;color:var(--accent-bright)">${e.id}</span></td>
+      <td style="font-size:12.5px">${pbName}</td>
+      <td style="font-size:12px;font-family:var(--font-mono)">${e.incident_id||'<span style="color:var(--text-muted)">—</span>'}</td>
+      <td>${statusBadge(e.status)}</td>
+      <td>${execProgress(e)}</td>
+      <td style="font-size:12px">${e.triggered_by}</td>
+      <td style="font-size:12px;color:var(--text-muted)">${e.execution_time?e.execution_time+'s':'Running...'}</td>
+      <td class="alert-age">${timeAgo(e.started_at)}</td>
+      <td onclick="event.stopPropagation()">
+        <button class="btn btn-xs btn-secondary" onclick="openExecutionModal('${e.id}')">Details</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function openExecutionModal(execId) {
+  document.getElementById('modal-exec-title').textContent = 'Execution Details';
+  document.getElementById('modal-exec-id').textContent = execId;
+  document.getElementById('modal-exec-body').innerHTML = '<div class="loading-overlay"><div class="spinner"></div></div>';
+  openModal('modal-execution');
+  loadExecutionDetail(execId);
+}
+
+async function loadExecutionDetail(execId) {
+  const e = await api('GET', `/executions/${execId}`);
+  renderExecutionDetail(e, execId);
+}
+
+function renderExecutionDetail(e, execId) {
+  document.getElementById('modal-exec-title').textContent = e.playbook_name || e.playbook_id;
+  document.getElementById('modal-exec-id').textContent = `${execId} · ${e.triggered_by}`;
+
+  const stepTypeColors = { triage:'var(--warning)',enrich:'var(--accent)',contain:'var(--danger)',investigate:'var(--purple)',notify:'var(--cyan)',manual:'var(--orange)',remediate:'var(--success)',report:'var(--text-muted)' };
+
+  const steps = e.step_results || [];
+  const successSteps = steps.filter(s=>s.status==='success').length;
+  const body = document.getElementById('modal-exec-body');
+
+  const autoRefresh = ['running','pending'].includes(e.status);
+
+  body.innerHTML = `
+    <!-- Header Status -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        ${statusBadge(e.status)}
+        <span class="badge badge-muted">${successSteps}/${e.total_steps||0} steps</span>
+        ${e.execution_time?`<span class="badge badge-success">${e.execution_time}s</span>`:''}
+        ${autoRefresh?'<div class="spinner" style="width:16px;height:16px"></div>':''}
+      </div>
+      ${autoRefresh?`<button class="btn btn-sm btn-secondary" onclick="loadExecutionDetail('${execId}')">🔄 Refresh</button>`:''}
+    </div>
+
+    <!-- Progress bar -->
+    <div style="margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-bottom:6px">
+        <span>Overall Progress</span>
+        <span>${Math.round((e.current_step||0)/(e.total_steps||1)*100)}%</span>
+      </div>
+      <div class="progress-bar" style="height:8px">
+        <div class="progress-fill" style="width:${Math.round((e.current_step||0)/(e.total_steps||1)*100)}%;background:${e.status==='success'?'var(--success)':e.status==='failed'?'var(--danger)':'linear-gradient(90deg,var(--accent),var(--purple))'}"></div>
+      </div>
+    </div>
+
+    <!-- Step Results -->
+    <div class="step-list">
+      ${steps.map((s,i) => `
+        <div class="step-item ${s.status} ${s.simulated?'simulated':''}">
+          <div class="step-num ${s.status}" style="${s.status==='success'?'background:var(--success);color:white':s.status==='failed'?'background:var(--danger);color:white':''}">
+            ${s.status==='success'?'✓':s.status==='failed'?'✗':i+1}
+          </div>
+          <div class="step-info" style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span class="step-name">${s.name}</span>
+              ${s.simulated?'<span class="badge badge-warning" style="font-size:10px">SIMULATED</span>':''}
+            </div>
+            <div class="step-desc">${fmtDate(s.timestamp)}</div>
+            ${s.output ? `<div class="step-output">${JSON.stringify(s.output, null, 2)}</div>` : ''}
+            ${s.error ? `<div class="step-output" style="color:var(--danger)">${s.error}</div>` : ''}
+          </div>
+          <div class="step-meta">
+            ${statusBadge(s.status)}
+            <span style="font-size:11px;color:var(--text-muted)">${s.duration||0}s</span>
+          </div>
+        </div>`).join('')}
+    </div>
+
+    <!-- Report -->
+    ${e.report ? `
+      <div style="margin-top:20px">
+        <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--accent-bright)">📄 Execution Report</div>
+        <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
+            <div style="text-align:center">
+              <div style="font-size:18px;font-weight:700;color:var(--success)">${e.report.successful_steps}</div>
+              <div style="font-size:10px;color:var(--text-muted)">SUCCESSFUL</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-size:18px;font-weight:700;color:var(--danger)">${e.report.failed_steps}</div>
+              <div style="font-size:10px;color:var(--text-muted)">FAILED</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-size:18px;font-weight:700;color:var(--warning)">${e.report.simulated_actions}</div>
+              <div style="font-size:10px;color:var(--text-muted)">SIMULATED</div>
+            </div>
+          </div>
+          <div class="sim-banner">⚠️ ${e.report.simulated_actions} action(s) were simulated. No actual system changes were made.</div>
+        </div>
+      </div>` : ''}
+
+    ${autoRefresh?`<script>setTimeout(()=>loadExecutionDetail('${execId}'),3000)<\/script>`:''}
+  `;
+}
+
+// ─────────────────── THREAT INTEL ───────────────────
+
+async function loadThreatIntel() {
+  const q = STATE.tiFilter ? `?reputation=${STATE.tiFilter}` : '';
+  const data = await api('GET', `/threat-intel${q}`);
+  renderTITable(data || []);
+}
+
+function filterTI(rep) {
+  STATE.tiFilter = rep;
+  document.querySelectorAll('[data-ti]').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll(`[data-ti="${rep}"]`).forEach(c => c.classList.add('active'));
+  loadThreatIntel();
+}
+
+function renderTITable(items) {
+  const tbody = document.getElementById('ti-body');
+  if (!items.length) {
+    tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state" style="padding:30px"><p>No IOCs</p></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = items.map(t => {
+    const repClass = { malicious:'danger', suspicious:'warning', clean:'success', unknown:'muted' }[t.reputation] || 'muted';
+    return `<tr>
+      <td><span class="badge badge-muted">${t.ioc_type}</span></td>
+      <td style="font-family:var(--font-mono);font-size:12px;color:var(--accent-bright)">${t.ioc_value}</td>
+      <td><span class="badge badge-${repClass} reputation-${t.reputation}">${t.reputation}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;min-width:100px">
+          <div class="ti-bar" style="flex:1"><div class="ti-fill" style="width:${(t.confidence||0)*100}%;background:${repClass==='danger'?'var(--danger)':repClass==='warning'?'var(--warning)':'var(--success)'}"></div></div>
+          <span style="font-size:11px;color:var(--text-muted)">${Math.round((t.confidence||0)*100)}%</span>
+        </div>
+      </td>
+      <td style="font-size:11px">${(t.tags||[]).map(tag=>`<span class="badge badge-muted" style="font-size:10px">${tag}</span>`).join(' ')}</td>
+      <td style="font-size:11px;color:var(--text-muted)">${(t.sources||[]).join(', ')}</td>
+    </tr>`;
+  }).join('');
+}
+
+async function lookupIOC() {
+  const type = document.getElementById('ti-type').value;
+  const value = document.getElementById('ti-value').value.trim();
+  if (!value) { toast('warning', 'Enter an IOC value', ''); return; }
+  const result = await api('POST', '/threat-intel/lookup', { ioc_type: type, ioc_value: value });
+  const container = document.getElementById('ti-result');
+  if (result.found) {
+    const d = result.data;
+    const repClass = { malicious:'danger', suspicious:'warning', clean:'success', unknown:'muted' }[d.reputation] || 'muted';
+    container.innerHTML = `
+      <div style="background:var(--bg-surface);border:1px solid var(--border-bright);border-radius:var(--radius);padding:14px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <span class="badge badge-${repClass}" style="font-size:13px">⚠️ ${d.reputation?.toUpperCase()}</span>
+          <span style="font-family:var(--font-mono);font-size:13px;color:var(--accent-bright)">${d.ioc_value}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">
+          <div><span style="color:var(--text-muted)">Type: </span>${d.ioc_type}</div>
+          <div><span style="color:var(--text-muted)">Confidence: </span>${Math.round((d.confidence||0)*100)}%</div>
+          <div><span style="color:var(--text-muted)">Sources: </span>${(d.sources||[]).join(', ')||'—'}</div>
+          <div><span style="color:var(--text-muted)">Tags: </span>${(d.tags||[]).join(', ')||'—'}</div>
+        </div>
+      </div>`;
+    toast(repClass==='danger'?'error':repClass==='warning'?'warning':'success', `IOC Found: ${d.reputation}`, `Confidence: ${Math.round((d.confidence||0)*100)}%`);
+  } else {
+    container.innerHTML = `<div style="padding:12px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:var(--radius);font-size:13px;color:var(--success)">✓ Not found in threat intelligence database — IOC appears clean.</div>`;
+    toast('success', 'IOC Not Found', 'No matches in threat intel database');
+  }
+}
+
+function lookupIOCQuick(type, value) {
+  nav('threat-intel');
+  setTimeout(() => {
+    document.getElementById('ti-type').value = type;
+    document.getElementById('ti-value').value = value;
+    lookupIOC();
+  }, 200);
+}
+
+// ─────────────────── AUDIT ───────────────────
+
+async function loadAudit() {
+  const sev = document.getElementById('audit-severity-filter')?.value || '';
+  const q = sev ? `?severity=${sev}&limit=100` : '?limit=100';
+  const data = await api('GET', `/audit${q}`);
+  const items = data.items || [];
+
+  document.getElementById('audit-total').textContent = data.total||0;
+  document.getElementById('audit-warn').textContent = items.filter(i=>i.severity==='warning').length;
+  document.getElementById('audit-critical').textContent = items.filter(i=>i.severity==='critical').length;
+
+  const container = document.getElementById('audit-list');
+  if (!items.length) {
+    container.innerHTML = '<div class="empty-state" style="padding:30px"><p>No audit events</p></div>';
+    return;
+  }
+  container.innerHTML = items.map(a => {
+    const icon = { info:'ℹ️', warning:'⚠️', critical:'🚨' }[a.severity]||'•';
+    return `<div style="padding:10px 14px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius);display:flex;gap:10px;align-items:flex-start" class="audit-${a.severity}">
+      <span style="font-size:14px;flex-shrink:0">${icon}</span>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px">
+          <span style="font-size:12.5px;font-weight:500">${a.action}</span>
+          <span class="badge badge-muted" style="font-size:10px">${a.resource_type}</span>
+          <span style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono)">${a.resource_id||''}</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted)">${a.resource_name||''}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:11px;color:var(--accent-bright)">${a.actor}</div>
+        <div style="font-size:11px;color:var(--text-muted)">${timeAgo(a.timestamp)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─────────────────── CREATE FORMS ───────────────────
+
+function openCreateAlertModal() { openModal('modal-create-alert'); }
+function openCreatePlaybookModal() { openModal('modal-create-playbook'); }
+
+async function submitCreateAlert() {
+  const title = document.getElementById('ca-title').value.trim();
+  if (!title) { toast('warning','Title required',''); return; }
+  try {
+    await api('POST', '/alerts', {
+      title,
+      severity: document.getElementById('ca-severity').value,
+      category: document.getElementById('ca-category').value,
+      source: document.getElementById('ca-source').value || 'Manual',
+      affected_host: document.getElementById('ca-host').value || null,
+      source_ip: document.getElementById('ca-srcip').value || null,
+      dest_ip: document.getElementById('ca-dstip').value || null,
+      description: document.getElementById('ca-desc').value || null,
+    });
+    closeModal('modal-create-alert');
+    toast('success', 'Alert Ingested', title);
+    loadAlerts();
+    updateBadges();
+    // Clear form
+    ['ca-title','ca-host','ca-srcip','ca-dstip','ca-desc'].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.value='';
+    });
+  } catch(e) {}
+}
+
+async function submitCreatePlaybook() {
+  const name = document.getElementById('cpb-name').value.trim();
+  if (!name) { toast('warning','Name required',''); return; }
+  const tags = document.getElementById('cpb-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  try {
+    await api('POST', '/playbooks', {
+      name,
+      description: document.getElementById('cpb-desc').value || '',
+      category: document.getElementById('cpb-category').value,
+      tags,
+    });
+    closeModal('modal-create-playbook');
+    toast('success', 'Playbook Created', name);
+    loadPlaybooks();
+  } catch(e) {}
+}
+
+// ─────────────────── DEMO ───────────────────
+
+async function runDemo() {
+  const btn = document.getElementById('btn-demo');
+  btn.disabled = true;
+  btn.textContent = '⚡ Running...';
+  try {
+    const r = await api('POST', '/demo/trigger-incident');
+    toast('info', '🎯 Demo Started', r.scenario);
+    updateBadges();
+    nav('incidents');
+    setTimeout(() => loadIncidents(), 500);
+  } catch(e) {
+    toast('error', 'Demo failed', e.message);
+  } finally {
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = '⚡ Run Demo';
+    }, 3000);
+  }
+}
+
+// ─────────────────── INIT ───────────────────
+
+async function init() {
+  connectWS();
+  await loadDashboard();
+  await updateBadges();
+  // Auto-refresh badges every 30s
+  setInterval(updateBadges, 30000);
+  // Auto-refresh active executions
+  setInterval(() => {
+    if (STATE.currentPage === 'executions') loadExecutions();
+  }, 5000);
+}
+
+window.addEventListener('load', init);
+</script>
+</body>
+</html>
